@@ -42,7 +42,7 @@
 
 点击`confirm`后，应当如图所示。
 
-<img src="./image-20230325202635760.png">
+<img src="./image/image-20230325202635760.png">
 
 2.3复制`database id`
 
