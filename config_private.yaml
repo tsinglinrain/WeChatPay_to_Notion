@@ -1,4 +1,0 @@
-# 请将此config.yaml复制并重命名为config_private.yaml
-
-database_id: ""    # 数据库ID
-token: "" # token
