@@ -10,9 +10,6 @@
 
 import csv
 
-new_path1 = "wechat_new1.csv"
-new_path2 = "wechat_new2.csv"
-
 def get_need_data(path1, path2):
     '''读取原始文件，截取并得到新的文件'''
 
