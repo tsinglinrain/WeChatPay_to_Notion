@@ -6,9 +6,6 @@
 import csv
 import re
 
-raw_path = "wechat_raw.csv"
-new_path = "wechat_new1.csv"
-
 def get_new_data(path_raw, path_new):
     # 读取原始文件，截取并得到新的文件
 
