@@ -1,10 +1,12 @@
 # WechatPay_to_Notion
+
 将导出的微信付款账单再次导入至Notion，（注意，没有使用Wechat Pay的官方API）
 
 这是个人对于Notion API一个尝试，目前作为练手项目，但是完全可以使用。<br>
 我自己就在使用，导入到Notion后利用数据库视图等便于管理支出情况。
 
 # 其他说明
+
 由于微信支付官方API仅仅对商户开放使用，普通人目前无法使用。详情点击<br>
 [简介-接口规则 | 微信支付商户平台文档中心](https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay-1.shtml)
 
