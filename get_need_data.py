@@ -1,38 +1,47 @@
 # 进一步分析数据
 # 这里自定义程度比较高,可以根据自己的需求进行修改
-    # 比如我只想要支出，那么我就添加if语句，只要支出的数据
+    # 比如我只想要支出，那么我就通过布尔取值，只要支出的数据
 
 # 进一步整理数据
-# 这里面的日期需要修改
-# 这里面的价格需要修改
+# 这里面的日期必须修改
+# 这里面的价格必须修改
+# 其他可自行修改
 
-# 注意, 这里用csv模块, 你也可以使用pandas模块
+# 这是我示例的一个数据处理过程
 
-import csv
+import pandas as pd
+import numpy as np
 
-def get_need_data(path1, path2):
-    '''读取原始文件，截取并得到新的文件'''
+def get_need_data(path):
+    '''删改数据'''
+    df = pd.read_csv(path, encoding="utf-8")
 
-    with open(path1, encoding="utf-8", newline="") as f:
-            csvreader = csv.reader(f)   # 读取csv文件,返回的是一个迭代器,每一行是一个列表
-            for row in csvreader:
-                if row[4] == "支出":
-                    row[5] = float(row[5][1:]) # 价格需要转换为浮点数, 并且去掉前面的￥符号,然而写入csv后又变成了str
-                    row[0] = "".join([row[0][:10], "T", row[0][11:], "Z"])  # 日期需要转换ISO 8601 format date
-                    # print(row[3], row[5], row[1], row[0])
-                    with open(path2, "a", encoding="utf-8", newline="") as f:
-                        csvwriter = csv.writer(f)
-                        csvwriter.writerow(row)
+    # 必须处理的列
+    df["交易时间"] = df["交易时间"].map(lambda x: "".join([x[:10], "T", x[11:], "Z"]))
+    df["金额(元)"] = df["金额(元)"].map(lambda x: float(x[1:]))
+
+    # 删除不需要的列 optional
+    df.drop(["支付方式", "当前状态", "交易单号", "商户单号"], axis=1, inplace=True)
+
+    # 删除"收/支"列中为"收入"所在的行
+    df = df[df["收/支"] != "收入"]
+    # df.drop(df[df["收/支"] == "收入"].index, inplace=True)
+    
+    # 再次删除"收/支"列
+    df.drop(["收/支"], axis=1, inplace=True)
+
+    # 对"备注"再次定义
+    df["备注"] = df["备注"].map(lambda x: x if x != "/" else "")
+
+    return df
 
 # def main():
-#     get_need_data(new_path1, new_path2)
+#     path_raw = "N_wechat_raw.csv"
+#     df = get_need_data(path_raw)
+#     print(df.head(5))  # 查看前5行
+#     for i in range(len(df)):
+#         print(df["交易时间"][i], df["金额(元)"][i], df["交易类型"][i], df["交易对方"][i], df["商品"][i], df["备注"][i])
+#         break
 
 # if __name__ == "__main__":
 #     main()
-
-
-
-
-
-
-
