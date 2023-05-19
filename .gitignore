@@ -162,3 +162,4 @@ cython_debug/
 config_private.yaml
 wechat_raw.csv
 wechat_standard.csv
+微信支付账单(.*).csv
