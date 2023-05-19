@@ -19,11 +19,12 @@ def main():
     get_standard_csv(path_raw, path_st)
 
     df =get_need_data(path_st)
-    content = df["商品"][0]
-    price = df["金额(元)"][0]
-    category =  df["交易类型"][0]
-    date = df["交易时间"][0]
-    
+    for i in range(len(df)):
+        content = df[i]["商品"]
+        price = df[i]["金额(元)"]
+        category =  df[i]["交易类型"]
+        date = df[i]["交易时间"]
+        
     properties = notion_property(content, price, category, date)    # price必须是float类型
     response = post_notion(properties, database_id, token)
     response_result(response)
