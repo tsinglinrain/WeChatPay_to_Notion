@@ -160,3 +160,5 @@ cython_debug/
 #.idea/
 
 config_private.yaml
+wechat_raw.csv
+wechat_standard.csv
