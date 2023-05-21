@@ -3,7 +3,6 @@
 # 另外因为是导出微信账单，可能出现日期与上次导入Notion有重复的情况，
     # 这里可以在 wechat_new1.csv 中直接删除某一些日期。当然你也可以用程序进行筛选
 
-import csv
 import re
 
 def get_standard_csv(path_raw, path_new):
@@ -18,6 +17,8 @@ def get_standard_csv(path_raw, path_new):
                     f2.writelines(re.sub(r"\s+,", ",", line) for line in lines[lines.index(line) + 1:])
 
 # def main():
+#     raw_path = "wechat_raw_test.csv"
+#     new_path = "wechat_standard_test.csv"
 #     get_new_data(raw_path, new_path)
 
 # if __name__ == "__main__":

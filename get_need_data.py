@@ -21,8 +21,9 @@ def get_need_data(path):
     df["金额(元)"] = df["金额(元)"].map(lambda x: float(x[1:]))
 
     # 删除不需要的列 optional
-    df.drop(["支付方式", "当前状态", "交易单号", "商户单号"], axis=1, inplace=True)
-
+    # df.drop(["支付方式", "当前状态", "交易单号", "商户单号"], axis=1, inplace=True)
+    df.drop(["当前状态"], axis=1, inplace=True)
+    
     # 删除"收/支"列中为"收入"所在的行
     df = df[df["收/支"] != "收入"]
     # df.drop(df[df["收/支"] == "收入"].index, inplace=True)
@@ -36,7 +37,7 @@ def get_need_data(path):
     return df
 
 # def main():
-#     path_raw = "N_wechat_raw.csv"
+#     path_raw = "wechat_standard.csv"
 #     df = get_need_data(path_raw)
 #     print(df.head(5))  # 查看前5行
 #     for i in range(len(df)):

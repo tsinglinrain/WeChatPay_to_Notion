@@ -35,9 +35,3 @@ def response_result(response):
     else:
         print("失败...")
         print(response.text)
-
-# def main():
-#     get_data_col(new_path2)  
-
-# if __name__ == "__main__":
-#     main()
