@@ -18,6 +18,8 @@
 
 # 进阶使用
 
+请先阅读**基本使用说明**，随后点击阅读**进阶指南**。
+
 [进阶指南](https://github.com/tsinglinrain/WechatPay_to_Notion/blob/main/Advanced_Instructions.md)
 
 # 基本使用说明
