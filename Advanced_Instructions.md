@@ -69,7 +69,7 @@ df = df[df["收/支"] != "收入"]	# 删除"收/支"列中为"收入"所在的�
 
    - 我们选择使用`name`查找的
 
-     ```json
+     ```python
      {
        "Option": {
          "select": {
@@ -97,7 +97,7 @@ df = df[df["收/支"] != "收入"]	# 删除"收/支"列中为"收入"所在的�
 
      我们把这个添加到最后，如下（因为太长，中间省略一大段代码，理解即可）：
 
-     ```json
+     ```python
      def notion_property(content, price, category, date, counterparty, remarks, 
                          transaction_number="",
                          merchant_tracking_number="",
