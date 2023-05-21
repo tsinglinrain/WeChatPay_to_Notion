@@ -17,7 +17,7 @@ def get_need_data(path):
     df = pd.read_csv(path, encoding="utf-8")
 
     # 必须处理的列
-    df["交易时间"] = df["交易时间"].map(lambda x: "".join([x[:10], "T", x[11:], "Z"]))
+    df["交易时间"] = df["交易时间"].map(lambda x: "".join([x[:10], "T", x[11:], "Z"]))  # ISO 8601
     df["金额(元)"] = df["金额(元)"].map(lambda x: float(x[1:]))
 
     # 删除不需要的列 optional

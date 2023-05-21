@@ -2,8 +2,10 @@
 
 将导出的微信付款账单再次导入至Notion，（注意，没有使用Wechat Pay的官方API）
 
-这是个人对于Notion API一个尝试，目前作为练手项目，但是完全可以使用。<br>
+这是个人对于Notion API一个尝试，目前仍然作为**练手项目**，目前已经相对完善，但是**完全可以使用**。<br>
 我自己就在使用，导入到Notion后利用数据库视图等便于管理支出情况。
+
+当然，寻找相关记账的模板，配合使用效果更佳哦。
 
 # 其他说明
 
@@ -12,25 +14,25 @@
 
 所以只好先将账单导出，随后利用python语言，并借助Notion提供的API接口对其进行请求，最终将内容发送至Notion数据库。
 
-灵感来源于少数派的[这篇文章](https://sspai.com/post/66658)，但是他没有给出完整的代码。
+灵感来源于少数派的[这篇文章](https://sspai.com/post/66658)，但是他没有给出完整的代码。同时少数派写得比较早，但是没有随着Notion的API更新而继续更新。
 
-# 使用说明
+# 基本使用说明
 
 ## 1.Notion API申请
 
 ### 1.1访问[My integrations | Notion Developers](https://www.notion.so/my-integrations)
 
-![image-20230324213427619](./image/image-20230324213427619.png)
+<img src="./image/image-20230324213427619.png" alt="image-20230324213427619" style="zoom: 50%;" />
 
 ### 1.2点击`New integration`
 
 简单填写`Name`，并且选择`Associated workspace`后下翻找到`Submit`并点击提交。
 
-![image-20230324214416578](./image/image-20230324214416578.png)
+<img src="./image/image-20230324214416578.png" alt="image-20230324214416578" style="zoom:50%;" />
 
 点击`show`后，点击`copy`，复制好后作为备用。如果是win系统，使用时敲击键盘`win`+`v`，即可查看剪贴板内容。
 
-![image-20230324214659248](./image/image-20230324214659248.png)
+<img src="./image/image-20230324214659248.png" alt="image-20230324214659248" style="zoom:50%;" />
 
 ## 2.Notion数据库
 
@@ -42,11 +44,11 @@
 
 如下图所示，点击`...`，`Add connections`，找到前面自己设置的`integration`，这里是点击`记账`。
 
-![image-20230325202326631](./image/image-20230325202326631.png)
+<img src="./image/image-20230325202326631.png" alt="image-20230325202326631" style="zoom:50%;" />
 
 点击`confirm`后，应当如图所示。
 
-<img src="./image/image-20230325202635760.png">
+<img src="./image/image-20230325202635760.png" style="zoom:50%;" >
 
 ### 2.3复制`database id`
 
@@ -59,15 +61,15 @@
 
 收到邮件后也会受到微信官方发来的解压密码。
 
-总之，最终得到一份格式为csv的文件。
+总之，最终得到一份格式为`csv`的文件。
 
 ## 4.python代码设置
 
-3.1下载本项目中所有文件
+### 3.1下载本项目中所有文件
 
-可以`git`下载，也可以直接下载本文件的压缩包，然后解压。
+可以`git`下载，也可以直接下载本项目的压缩包，然后解压。
 
-### 3.1`database id` 和 `token`填入
+### 3.2`database id` 和 `token`填入
 
 请将`config.yaml`复制并改成`config_private.yaml`，然后填入如下内容：
 
@@ -77,9 +79,14 @@ database_id: "aaa121************"    # 数据库ID, 要填进去哦
 token: "secret_Wa***********" # token, 记得自己填写
 ```
 
+解释原因：
+
+- 可能存在有人`fork`的情况，`git`上传一般会把文件全部上传，容易把隐私不小心上传上去。
+- 在`.gitignore`里面我已经设置忽略`config_private.yaml`
+
 ### 3.3重命名
 
-将微信账单的csv文件复制进入此文件夹下，并且将此csv文件重命名为`wechat_raw.csv`。
+将微信账单的`csv`文件复制进入此文件夹下，并且将此`csv`文件重命名为`wechat_raw.csv`。
 
 解释原因：
 
