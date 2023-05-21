@@ -69,7 +69,7 @@ df = df[df["收/支"] != "收入"]	# 删除"收/支"列中为"收入"所在的�
 
    - 我们选择使用`name`查找的
 
-     ```python
+     ```json
      {
        "Option": {
          "select": {
@@ -83,7 +83,7 @@ df = df[df["收/支"] != "收入"]	# 删除"收/支"列中为"收入"所在的�
 
      `Option`不是随便写的，需要和property对应。`Option 1`是需要输入进去的，我们当然也要替换。
 
-     ```json
+     ```pyhon
      {
        "Test_Select": {
          "select": {
