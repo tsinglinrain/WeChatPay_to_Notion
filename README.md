@@ -16,6 +16,10 @@
 
 灵感来源于少数派的[这篇文章](https://sspai.com/post/66658)，但是他没有给出完整的代码。同时少数派写得比较早，但是没有随着Notion的API更新而继续更新。
 
+# 进阶使用
+
+[进阶指南](https://github.com/tsinglinrain/WechatPay_to_Notion/blob/main/Advanced_Instructions.md)
+
 # 基本使用说明
 
 ## 1.Notion API申请
