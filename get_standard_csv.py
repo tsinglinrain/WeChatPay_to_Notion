@@ -13,16 +13,17 @@ def get_standard_csv(path_raw, path_new):
         for line in lines:  # 遍历每一行
             if line.startswith("----------------------微信"):   # 找到以"----------------------微信"开头的行
                 # 将该行之后的所有行按照每一行写入新文件并且用re删除每一行中的空格
-                with open(path_new, "a", encoding="utf-8", newline="") as f2:
+                with open(path_new, "w", encoding="utf-8", newline="") as f2:
                     f2.writelines(re.sub(r"\s+,", ",", line) for line in lines[lines.index(line) + 1:])
 
-# def main():
-#     raw_path = "wechat_raw_test.csv"
-#     new_path = "wechat_standard_test.csv"
-#     get_new_data(raw_path, new_path)
+def main():
+    raw_path = "wechat_raw_test.csv"
+    new_path = "wechat_standard_test.csv"
+    get_standard_csv(raw_path, new_path)
+    print("Done")
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
 
 
 

@@ -36,13 +36,13 @@ def get_need_data(path):
 
     return df
 
-# def main():
-#     path_raw = "wechat_standard.csv"
-#     df = get_need_data(path_raw)
-#     print(df.head(5))  # 查看前5行
-#     for i in range(len(df)):
-#         print(df["交易时间"][i], df["金额(元)"][i], df["交易类型"][i], df["交易对方"][i], df["商品"][i], df["备注"][i])
-#         break
+def main():
+    path_raw = "wechat_standard.csv"
+    df = get_need_data(path_raw)
+    print(df.head(5))  # 查看前5行
+    for i in range(len(df)):
+        print(df["交易时间"][i], df["金额(元)"][i], df["交易类型"][i], df["交易对方"][i], df["商品"][i], df["备注"][i])
+        break
 
-# if __name__ == "__main__":
-#     main()
+if __name__ == "__main__":
+    main()
