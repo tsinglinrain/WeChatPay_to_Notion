@@ -17,7 +17,7 @@ def main():
 
     get_standard_csv(path_raw, path_st)
 
-    df =get_need_data(path_st)
+    df = get_need_data(path_st)
     for i in range(len(df)):
         content = df.iloc[i]["商品"]
         price = df.iloc[i]["金额(元)"]
