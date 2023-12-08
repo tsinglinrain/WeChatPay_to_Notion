@@ -24,13 +24,13 @@
 
 # 基本使用说明
 
-## 1.Notion API申请
+## 1. Notion API申请
 
-### 1.1访问[My integrations | Notion Developers](https://www.notion.so/my-integrations)
+### 1.1 访问[My integrations | Notion Developers](https://www.notion.so/my-integrations)
 
 <img src="./image/image-20230324213427619.png" alt="image-20230324213427619" style="zoom: 50%;" />
 
-### 1.2点击`New integration`
+### 1.2 点击`New integration`
 
 简单填写`Name`，并且选择`Associated workspace`后下翻找到`Submit`并点击提交。
 
@@ -40,7 +40,7 @@
 
 <img src="./image/image-20230324214659248.png" alt="image-20230324214659248" style="zoom:50%;" />
 
-## 2.Notion数据库
+## 2. Notion数据库
 
 ### 2.1 创建数据库
 
@@ -56,12 +56,12 @@
 
 <img src="./image/image-20230325202635760.png" style="zoom:50%;" >
 
-### 2.3复制`database id`
+### 2.3 复制`database id`
 
 在浏览器中找到自己的数据库，观察上面的网址，网址应当如下所示，<br>https://www.notion.so/tsinglin/68151a1caaca488a884cafcd5086810c?v=3d0c405e7cae406599eed2fe3f9233dc<br>
 复制`tsinglin/`与`?`之间的内容，这就是`database id`。
 
-## 3.WeChat Pay账单的导出
+## 3. WeChat Pay账单的导出
 
 打开微信，点击底下`我`，点击`服务`，点击右上方`钱包`，点击右上角`账单`，点击右上角`常见问题`，点击左上角`下载账单`，点击`用于个人对账`，自己选择时间，输入支付密码和邮箱。请注意邮箱一定不能填错，否则容易造成隐私泄露。
 
@@ -69,13 +69,13 @@
 
 总之，最终得到一份格式为`csv`的文件。
 
-## 4.python代码设置
+## 4. python代码设置
 
-### 3.1下载本项目中所有文件
+### 4.1 下载本项目中所有文件
 
 可以`git`下载，也可以直接下载本项目的压缩包，然后解压。
 
-### 3.2`database id` 和 `token`填入
+### 4.2 `database id` 和 `token`填入
 
 请将`config.yaml`复制并改成`config_private.yaml`，然后填入如下内容：
 
@@ -90,7 +90,7 @@ token: "secret_Wa***********" # token, 记得自己填写
 - 可能存在有人`fork`的情况，`git`上传一般会把文件全部上传，容易把隐私不小心上传上去。
 - 在`.gitignore`里面我已经设置忽略`config_private.yaml`
 
-### 3.3重命名
+### 4.3 重命名
 
 将微信账单的`csv`文件复制进入此文件夹下，并且将此`csv`文件重命名为`wechat_raw.csv`。
 
@@ -99,11 +99,11 @@ token: "secret_Wa***********" # token, 记得自己填写
 1. 代码中文件位置为相对路径，必须将微信账单文件与上述文件为同一文件夹下
 2. 代码中规定文件名称为`wechat_raw.csv`，必须重命名微信账单文件
 
-### 3.4运行程序
+### 4.4 运行程序
 
 运行`main.py`即可。
 
-### 3.5观察运行结果
+### 4.5 观察运行结果
 
 一般是出现`成功`。
 
