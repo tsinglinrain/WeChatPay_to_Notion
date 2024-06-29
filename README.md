@@ -1,3 +1,5 @@
+<img src="./image/Alipay_and_WeChatPay.excalidraw 2.svg" alt="Bill2NotionLogo" style="width:100%; height:auto;" />
+
 # <img src="./image/BillNotionSmart.excalidraw.svg" alt="Bill2NotionLogo" style="width:8%; height:auto;" /> WechatPay_to_Notion
 
 
@@ -16,9 +18,9 @@
 
 ## 快速开始
 
-下载本项目。
+- 下载本项目
 
-填写`config_private.yaml`文件
+- 填写`config_private.yaml`文件
 
 ```yaml
 email_config:
@@ -31,7 +33,7 @@ notion_config:
   token: "secret_OHvKVP*******************Lq" # token
 ```
 
-运行`main.py`
+- 运行`main.py`
 
 ## 自定义
 
