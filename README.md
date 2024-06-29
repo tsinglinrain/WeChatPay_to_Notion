@@ -1,4 +1,5 @@
-<img src="./image/Alipay_and_WeChatPay.excalidraw 2.svg" alt="Bill2NotionLogo" style="width:100%; height:auto;" />
+<img src="./image/Alipay_and_WeChatPay2.excalidraw.svg" alt="Bill2NotionLogo" style="width:20%; height:auto; float: right;" />
+
 
 # <img src="./image/BillNotionSmart.excalidraw.svg" alt="Bill2NotionLogo" style="width:8%; height:auto;" /> WechatPay_to_Notion
 
