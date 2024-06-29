@@ -1,8 +1,8 @@
-# <img src="./image/BillNotionSmart.excalidraw.svg" alt="Bill2NotionLogo" style="width:8%; height:auto;" /> WechatPay_to_Notion
+# <img src="./image/BillNotionSmart.excalidraw.svg" alt="Bill2NotionLogo" style="width:8%; height:auto;" /> Bills_to_Notion
 
 微信和支付宝账单发送至邮箱，邮件提取附件导入Notion
 
-# 其他说明
+## 其他说明
 
 > 寻找相关记账的模板，配合使用效果更佳哦。
 
