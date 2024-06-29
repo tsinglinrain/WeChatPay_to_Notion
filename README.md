@@ -1,10 +1,6 @@
-<img src="./image/Alipay_and_WeChatPay2.excalidraw.svg" alt="Bill2NotionLogo" style="width:20%; height:auto; float: right;" />
-
-
 # <img src="./image/BillNotionSmart.excalidraw.svg" alt="Bill2NotionLogo" style="width:8%; height:auto;" /> WechatPay_to_Notion
 
-
-微信和支付宝账单发送邮件，邮件提取附件导入Notion，（注意，没有使用Wechat Pay的官方API）
+微信和支付宝账单发送至邮箱，邮件提取附件导入Notion
 
 # 其他说明
 
@@ -25,7 +21,7 @@
 
 ```yaml
 email_config:
-  imap_url: "l3071635955@163.com"
+  imap_url: "l3*********@163.com"
   password: "HZ************TG"
   username: "imap.163.com"
 
