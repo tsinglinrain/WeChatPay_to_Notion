@@ -1,6 +1,6 @@
 # 进一步分析数据
 # 这里自定义程度比较高,可以根据自己的需求进行修改
-    # 比如我只想要支出，那么我就通过布尔取值，只要支出的数据
+# 比如我只想要支出，那么我就通过布尔取值，只要支出的数据
 
 # 进一步整理数据
 # 这里面的日期必须修改
@@ -11,6 +11,7 @@
 
 import pandas as pd
 
+
 class DataProcessor:
     def __init__(self, path, platform):
         self.path = path
@@ -18,14 +19,16 @@ class DataProcessor:
         self.df = pd.read_csv(self.path, encoding="utf-8")
 
     def process_mandatory_fields(self):
-        self.df["交易时间"] = self.df["交易时间"].map(lambda x: "".join([x[:10], "T", x[11:], "Z"]))  # ISO 8601
+        self.df["交易时间"] = self.df["交易时间"].map(
+            lambda x: "".join([x[:10], "T", x[11:], "Z"])
+        )  # ISO 8601
         if self.platform == "alipay":
             self.df["金额"] = self.df["金额"].map(lambda x: float(x))
             self.df["备注"] = self.df["备注"].fillna("")
         elif self.platform == "wechatpay":
             self.df["金额(元)"] = self.df["金额(元)"].map(lambda x: float(x[1:]))
             # self.df["金额(元)"] = self.df["金额(元)"].map(lambda x: float(x[1:]) if isinstance(x, str) else x)
-            self.df["备注"] =  self.df["备注"].map(lambda x: "" if x == "/" else x)
+            self.df["备注"] = self.df["备注"].map(lambda x: "" if x == "/" else x)
 
     def filter_rows(self, column, values_to_exclude):
         for value in values_to_exclude:
@@ -40,6 +43,7 @@ class DataProcessor:
     def get_processed_data(self):
         pass
         return self.df
+
 
 if __name__ == "__main__":
     # path_raw_alipay = "alipay_standard.csv"

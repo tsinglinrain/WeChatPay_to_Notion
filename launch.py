@@ -2,15 +2,19 @@
 
 from mail_client import MailClient
 import yaml
+
+
 def main():
     # 加载 .yaml 文件
     flag = False
-    with open('config.yaml', 'r') as file:
+    with open("config.yaml", "r") as file:
         config = yaml.safe_load(file)
 
     # 获取配置变量
-    email_config = config.get('email_config', {})
-    username, password, imap_url = (i for i in email_config.values())   # 写成这样更简洁,但需要注意顺序
+    email_config = config.get("email_config", {})
+    username, password, imap_url = (
+        i for i in email_config.values()
+    )  # 写成这样更简洁,但需要注意顺序
 
     client = MailClient(username, password, imap_url)
     client.connect()
@@ -25,5 +29,7 @@ def main():
     if not flag:
         print("Can't get signal, maybe you forget to send the signal email.")
         print("Only when you send a signal, you will launch the game.")
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     main()
