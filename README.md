@@ -19,7 +19,7 @@
 </p>
 
 <div align="center">
-<img src="./image/Bill_to_Notion.png" alt="Bill2NotionLogo" style="width:100%; height:auto;" />
+<img src="./image/Bill_to_Notion_excalidraw.svg" alt="Bill2NotionLogo" style="width:100%; height:auto;" />
 </div>
 ## 其他说明
 
