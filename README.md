@@ -1,6 +1,18 @@
-# <img src="./image/BillNotionSmart.excalidraw.svg" alt="Bill2NotionLogo" style="width:8%; height:auto;" /> Bills_to_Notion
+<div align="center">
+<img src="./image/BillNotionSmart.excalidraw.svg" alt="Bill2NotionLogo" style="width:8%; height:auto;" />
+</div>
 
-微信和支付宝账单发送至邮箱，邮件提取附件导入Notion
+<p align="center"><b>WeChat and Alipay bills are sent to emails, and email attachments are extracted and imported into Notion</b></p>
+<p align="center"><b>微信和支付宝账单发送至邮箱，邮件提取附件导入Notion</b></p>
+
+<p align="center">
+
+  [<a href="docs/README_EN.md">English</a>] | [<a href="docs/README_TW.md">中文(繁體)</a>] | [<a href="docs/README_JP.md">日本語</a>]
+
+</p>
+
+
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 ## 其他说明
 
@@ -43,3 +55,5 @@ pass
 - 导入成功后邮件返回提醒
 
 - 可以设置每月自动导出提醒
+
+
