@@ -18,6 +18,9 @@
   [<a href="docs/README_EN.md">English</a>] | [<a href="docs/README_zh_TW.md">中文(繁體)</a>] | [<a href="docs/README_JP.md">日本語</a>]
 </p>
 
+<div align="center">
+<img src="./image/Bill_to_Notion.png" alt="Bill2NotionLogo" style="width:100%; height:auto;" />
+</div>
 ## 其他说明
 
 > 寻找相关记账的模板，配合使用效果更佳哦。
