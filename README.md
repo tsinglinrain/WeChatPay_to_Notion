@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./image/BillNotionSmart.excalidraw.svg" alt="Bill2NotionLogo" style="width:8%; height:auto;" />
+<img src="./image/BillNotionSmart.excalidraw.svg" alt="Bill2NotionLogo" style="width:12%; height:auto;" />
 </div>
 
 <p align="center"><b>WeChat and Alipay bills are sent to emails, and email attachments are extracted and imported into Notion</b></p>
@@ -17,9 +17,6 @@
 <p align="center">
   [<a href="docs/README_EN.md">English</a>] | [<a href="docs/README_zh_TW.md">中文(繁體)</a>] | [<a href="docs/README_JP.md">日本語</a>]
 </p>
-
-
-
 
 ## 其他说明
 
