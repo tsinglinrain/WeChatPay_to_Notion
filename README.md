@@ -66,25 +66,51 @@
 
 - 填写`config_private.yaml`文件，如下
 
-```yaml
-email_config:
-  imap_url: "l3*********@163.com"
-  password: "HZ************TG"
-  username: "imap.163.com"
+  ```yaml
+  email_config:
+    imap_url: "l3*********@163.com"
+    password: "HZ************TG"
+    username: "imap.163.com"
 
-notion_config:
-  database_id: "c1a348********************4c7"  # 数据库ID
-  token: "secret_OHvKVP*******************Lq" # token
-```
+  notion_config:
+    database_id: "c1a348********************4c7"  # 数据库ID
+    token: "secret_OHvKVP*******************Lq" # token
+  ```
 
-<details>
-  <summary>database_id details</summary>
-  
-    https://www.notion.so/tsinglin/68111a1sssssss487a884cafcd5333310c?v=3d0c405e7cae405599aed2fe0f5233cc
+  <details>
+    <summary>database_id details</summary>
+    
+      https://www.notion.so/tsinglin/68111a1sssssss487a884cafcd5333310c?v=3d0c405e7cae405599aed2fe0f5233cc
 
-    database_id: 68111a1sssssss487a884cafcd5333310c
+      database_id: 68111a1sssssss487a884cafcd5333310c
 
-</details>
+  </details>
+
+- 账单发送到邮箱后，会有消息告知密码，请复制此密码，自己邮箱发送密码给自己，**格式必须如下**：
+
+  <img src="./image/alipay_password.jpg" alt="Notion_Integration_step8" style="width:40%; height:auto;"/>
+
+  即自己发给自己且标题必须形为`alipay解压密码123456`或者`wechatpay解压密码123456`，原因是代码规定如此，改了必报错。
+  ```python
+  def get_passwd(self):
+    # 检查邮件发件邮箱是否是自己的邮箱
+    flag = False
+    if self.from_addr == self.username:
+        print("Subject,from get_passwd:", self.subject)
+        if self.payment_platform == "alipay":
+            if re.match("^alipay解压密码[0-9]{6}$", self.subject):
+                print("Subject:", self.subject)
+                self.paswd = self.subject[-6:]
+                print("Password:", self.paswd)
+                flag = True
+        elif self.payment_platform == "wechatpay":
+            if re.match("^wechatpay解压密码[0-9]{6}$", self.subject):
+                print("Subject:", self.subject)
+                self.paswd = self.subject[-6:]
+                print("Password:", self.paswd)
+                flag = True
+    return flag
+  ```
 
 - 运行`main.py`
 
@@ -99,5 +125,3 @@ pass
 - 导入成功后邮件返回提醒
 
 - 可以设置每月自动导出提醒
-
-
