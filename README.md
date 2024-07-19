@@ -49,13 +49,15 @@
   <details>
     <summary>Notion Integration</summary>
     键入`https://www.notion.so/profile/integrations`
-    <img src="./image/Notion_Integration/Notion_Integration_step1.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
-    <img src="./image/Notion_Integration/Notion_Integration_step2.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
-    <img src="./image/Notion_Integration/Notion_Integration_step3.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
-    <img src="./image/Notion_Integration/Notion_Integration_step4.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
-    <img src="./image/Notion_Integration/Notion_Integration_step5.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
-    <img src="./image/Notion_Integration/Notion_Integration_step6.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
-    <img src="./image/Notion_Integration/Notion_Integration_step7.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
+
+    <img src="./image/Notion_Integration/Notion_Integration_step1.png" alt="Notion_Integration_step1" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step2.png" alt="Notion_Integration_step2" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step3.png" alt="Notion_Integration_step3" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step4.png" alt="Notion_Integration_step4" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step5.png" alt="Notion_Integration_step5" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step6.png" alt="Notion_Integration_step6" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step7.png" alt="Notion_Integration_step7" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step8.png" alt="Notion_Integration_step8" style="width:80%; height:auto;"/>
   </details>
 
 - 下载本项目
