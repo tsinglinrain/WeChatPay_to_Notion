@@ -21,6 +21,7 @@
 <div align="center">
 <img src="./image/Bill_to_Notion_excalidraw.svg" alt="Bill2NotionLogo" style="width:100%; height:auto;" />
 </div>
+
 ## 其他说明
 
 > 寻找相关记账的模板，配合使用效果更佳哦。
@@ -34,9 +35,13 @@
 
 ## 快速开始
 
+- 导出账单，发送至邮箱
+
 - 下载本项目
 
-- 填写`config_private.yaml`文件
+- 运行`config_duplicate.py`文件
+
+- 填写`config_private.yaml`文件，如下
 
 ```yaml
 email_config:
