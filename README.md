@@ -87,7 +87,8 @@
   </details>
 
 - 账单发送到邮箱后，会有消息告知密码，请复制此密码，自己邮箱发送密码给自己，**格式必须如下**：
-
+  <details>
+  <summary>格式示例</summary>
   <img src="./image/alipay_password.jpg" alt="Notion_Integration_step8" style="width:40%; height:auto;"/>
 
   即自己发给自己且标题必须形为`alipay解压密码123456`或者`wechatpay解压密码123456`，原因是代码规定如此，改了必报错。
@@ -111,7 +112,7 @@
                 flag = True
     return flag
   ```
-
+  </details>
 - 运行`main.py`
 
 ## 自定义
