@@ -1,5 +1,5 @@
 <div align="center">
-<img src="./image/BillNotionSmart.excalidraw.svg" alt="Bill2NotionLogo" style="width:12%; height:auto;" />
+  <img src="./image/BillNotionSmart.excalidraw.svg" alt="Bill2NotionLogo" style="width:12%; height:auto;" />
 </div>
 
 <p align="center"><b>WeChat and Alipay bills are sent to emails, and email attachments are extracted and imported into Notion</b></p>
@@ -19,7 +19,7 @@
 </p>
 
 <div align="center">
-<img src="./image/Bill_to_Notion_excalidraw.svg" alt="Bill2NotionLogo" style="width:100%; height:auto;" />
+  <img src="./image/Bill_to_Notion_excalidraw.svg" alt="Bill_to_Notion_excalidraw" style="width:100%; height:auto;" />
 </div>
 
 ## 其他说明
@@ -35,10 +35,28 @@
 
 ## 快速开始
 
+- 开通某个邮箱的IMAP协议，请自行互联网搜寻。这里给163邮箱的开通流程作为示例，[帮助中心_常见问题IMAP (163.com)](https://help.mail.163.com/faqDetail.do?code=d7a5dc8471cd0c0e8b4b8f4f8e49998b374173cfe9171305fa1ce630d7f67ac2a5feb28b66796d3b)
+
 - 导出账单，发送至邮箱
 <div align="center">
-<img src="./image/wechatpay_bill.png" alt="Bill2NotionLogo" style="width:100%; height:auto;" />
+  <img src="./image/wechatpay_bill.png" alt="wechatpay_bill" style="width:100%; height:auto;"/>
+  <img src="./image/alipay_bill.png" alt ="aliapy_bill" style="width:100%; height:auto;"/>
 </div>
+
+- 拷贝示例数据库，建议`duplicate`此[账单导入Notion模板](https://tsinglin.notion.site/68951a1caaba487a884cafcd5086810c?v=3d0c405e7cae405599aed2fe0f5233cc)，熟悉之后可自行修改
+
+- 自定义Notion Integration
+  <details>
+    <summary>Notion Integration</summary>
+    键入`https://www.notion.so/profile/integrations`
+    <img src="./image/Notion_Integration/Notion_Integration_step1.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step2.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step3.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step4.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step5.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step6.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step7.png" alt="wechatpay_bill" style="width:50%; height:auto;"/>
+  </details>
 
 - 下载本项目
 
