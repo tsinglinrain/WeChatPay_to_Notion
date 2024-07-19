@@ -79,11 +79,11 @@ notion_config:
 
 <details>
   <summary>database_id details</summary>
-    ```plane text
+  
     https://www.notion.so/tsinglin/68111a1sssssss487a884cafcd5333310c?v=3d0c405e7cae405599aed2fe0f5233cc
 
     database_id: 68111a1sssssss487a884cafcd5333310c
-    ```
+
 </details>
 
 - 运行`main.py`
