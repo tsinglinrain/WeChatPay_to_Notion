@@ -1,43 +1,53 @@
-import yaml
+import main_mail
+import main_notion
+from notion_client import NotionClient
+from mail_client import MailClient
+import config_duplicate
 
-from get_standard_csv import *
-from get_need_data import *
-from post_preparation import *
-from notion_property import *
+
+def bill_to_notion(payment_platform):
+
+    if payment_platform not in ["alipay", "wechatpay"]:  # 防呆
+        raise ValueError(
+            "Invalid payment platform, payment platform must be 'alipay' or 'wechatpay'"
+        )
+
+    config_duplicate.check_and_copy_config()
+
+    # 加载配置文件
+    username, password, imap_url, database_id, token = main_mail.config_loader()
+
+    # 连接邮箱,获取附件
+    client = MailClient(
+        username, password, imap_url, payment_platform
+    )  # payment_platform="wechatpay"
+    client.connect()
+    client.fetch_mail()
+    main_mail.get_attachment(client)
+
+    # unzip_attachment
+    path_att = "./attachment"
+    path_target = "./bill_csv_raw"
+    msg = main_mail.unzip_attachment(
+        path_att, path_target, client.paswd, payment_platform
+    )
+    print(msg)
+
+    # move_file
+    csv_csv_path = "bill_csv_raw"
+    target_path = "./"
+    main_mail.move_file(csv_csv_path, target_path, payment_platform)
+
+    # 初始化 NotionClient
+    notionclient = NotionClient(database_id, token, payment_platform)
+    main_notion.process_apply(notionclient, payment_platform)
+
 
 def main():
-    # 基本信息
-    with open("config_private.yaml", "r", encoding="utf-8") as f:
-        config = yaml.load(f, Loader=yaml.FullLoader)
-    database_id = config["database_id"]
-    token = config["token"]
+    # payment_platform="alipay"
+    payment_platform = "wechatpay"
+    bill_to_notion(payment_platform)
 
-    path_raw = "wechat_raw.csv"
-    path_st = "wechat_standard.csv"
-
-    get_standard_csv(path_raw, path_st)
-
-    df = get_need_data(path_st)
-    for i in range(len(df)):
-        content = df.iloc[i]["商品"]
-        price = df.iloc[i]["金额(元)"]
-        category = df.iloc[i]["交易类型"]
-        date = df.iloc[i]["交易时间"]
-        counterparty = df.iloc[i]["交易对方"]
-        remarks = df.iloc[i]["备注"]
-        transaction_number = df.iloc[i]["交易单号"]
-        merchant_tracking_number = df.iloc[i]["商户单号"]
-        payment_method = df.iloc[i]["支付方式"]
-
-        # print(content, price, category, date, counterparty, remarks, transaction_number, merchant_tracking_number, payment_method)
-        properties = notion_property(content, price, category, date, counterparty,
-                                     remarks,
-                                     transaction_number, 
-                                     merchant_tracking_number, 
-                                     payment_method
-                                    )
-        response = post_notion(properties, database_id, token)
-        response_result(response)
 
 if __name__ == "__main__":
     main()

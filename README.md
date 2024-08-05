@@ -1,121 +1,128 @@
-# WechatPay_to_Notion
+<div align="center">
+  <img src="./image/BillNotionSmart.excalidraw.svg" alt="Bill2NotionLogo" style="width:12%; height:auto;" />
+</div>
 
-将导出的微信付款账单再次导入至Notion，（注意，没有使用Wechat Pay的官方API）
-
-这是个人对于Notion API一个尝试，目前仍然作为**练手项目**，目前已经相对完善，但是**完全可以使用**。<br>
-我自己就在使用，导入到Notion后利用数据库视图等便于管理支出情况。
-
-当然，寻找相关记账的模板，配合使用效果更佳哦。
-
-# 其他说明
-
-由于微信支付官方API仅仅对商户开放使用，普通人目前无法使用。详情点击<br>
-[简介-接口规则 | 微信支付商户平台文档中心](https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay-1.shtml)
-
-所以只好先将账单导出，随后利用python语言，并借助Notion提供的API接口对其进行请求，最终将内容发送至Notion数据库。
-
-灵感来源于少数派的[这篇文章](https://sspai.com/post/66658)，但是他没有给出完整的代码。同时少数派写得比较早，但是没有随着Notion的API更新而继续更新。
-
-# 进阶使用
-
-请先阅读**基本使用说明**，随后点击阅读**进阶指南**。
-
-[进阶指南](https://github.com/tsinglinrain/WechatPay_to_Notion/blob/main/Advanced_Instructions.md)
-
-# 基本使用说明
-
-## 1. Notion API申请
-
-### 1.1 访问[My integrations | Notion Developers](https://www.notion.so/my-integrations)
-
-<img src="./image/image-20230324213427619.png" alt="image-20230324213427619" style="zoom: 50%;" />
-
-### 1.2 点击`New integration`
-
-简单填写`Name`，并且选择`Associated workspace`后下翻找到`Submit`并点击提交。
-
-<img src="./image/image-20230324214416578.png" alt="image-20230324214416578" style="zoom:50%;" />
-
-点击`show`后，点击`copy`，复制好后作为备用。如果是win系统，使用时敲击键盘`win`+`v`，即可查看剪贴板内容。
-
-<img src="./image/image-20230324214659248.png" alt="image-20230324214659248" style="zoom:50%;" />
-
-## 2. Notion数据库
-
-### 2.1 创建数据库
-
-你可以复制此[模板](https://tsinglin.notion.site/tsinglin/68951a1caaba487a884cafcd5086810c?v=3d0c405e7cae405599aed2fe0f5233cc)进行参考。<br>请注意，如果你对于官方的请求模式并不熟悉，请不要编辑本模板；如果你需要自己设置，需要参考[Introduction (notion.com)](https://developers.notion.com/reference/intro)，并对python代码进行相关修改。
-
-### 2.2 引入integration
-
-如下图所示，点击`...`，`Add connections`，找到前面自己设置的`integration`，这里是点击`记账`。
-
-<img src="./image/image-20230325202326631.png" alt="image-20230325202326631" style="zoom:50%;" />
-
-点击`confirm`后，应当如图所示。
-
-<img src="./image/image-20230325202635760.png" style="zoom:50%;" >
-
-### 2.3 复制`database id`
-
-在浏览器中找到自己的数据库，观察上面的网址，网址应当如下所示，<br>https://www.notion.so/tsinglin/68151a1caaca488a884cafcd5086810c?v=3d0c405e7cae406599eed2fe3f9233dc<br>
-复制`tsinglin/`与`?`之间的内容，这就是`database id`。
-
-## 3. WeChat Pay账单的导出
-
-打开微信，点击底下`我`，点击`服务`，点击右上方`钱包`，点击右上角`账单`，点击右上角`常见问题`，点击左上角`下载账单`，点击`用于个人对账`，自己选择时间，输入支付密码和邮箱。请注意邮箱一定不能填错，否则容易造成隐私泄露。
-
-收到邮件后也会受到微信官方发来的解压密码。
-
-总之，最终得到一份格式为`csv`的文件。
-
-## 4. python代码设置
-
-### 4.1 下载本项目中所有文件
-
-可以`git`下载，也可以直接下载本项目的压缩包，然后解压。
-
-### 4.2 `database id` 和 `token`填入
-
-请将`config.yaml`复制并改成`config_private.yaml`，然后填入如下内容：
-
-```yaml
-# 请将此config.yaml复制并重命名为config_private.yaml
-database_id: "aaa121************"    # 数据库ID, 要填进去哦
-token: "secret_Wa***********" # token, 记得自己填写
-```
-
-解释原因：
-
-- 可能存在有人`fork`的情况，`git`上传一般会把文件全部上传，容易把隐私不小心上传上去。
-- 在`.gitignore`里面我已经设置忽略`config_private.yaml`
-
-### 4.3 重命名
-
-将微信账单的`csv`文件复制进入此文件夹下，并且将此`csv`文件重命名为`wechat_raw.csv`。
-
-解释原因：
-
-1. 代码中文件位置为相对路径，必须将微信账单文件与上述文件为同一文件夹下
-2. 代码中规定文件名称为`wechat_raw.csv`，必须重命名微信账单文件
-
-### 4.4 运行程序
-
-运行`main.py`即可。
-
-### 4.5 观察运行结果
-
-一般是出现`成功`。
-
-出现`失败`，需要单独检查，暂时还没有返回是哪一行出现失败，以后再修改(没想好怎么改)。
+<p align="center"><b>WeChat and Alipay bills are sent to emails, and email attachments are extracted and imported into Notion</b></p>
+<p align="center"><b>微信和支付宝账单发送至邮箱，邮件提取附件导入Notion</b></p>
 
 
-## 5. 下一步计划
+<p align="center">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Notion-Integration-black">
+  <img alt="Static Badge" src="https://img.shields.io/badge/WeChat%20Pay-Bill-green">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Alipay-Bill-blue">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Code_style-black-black">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Python-green">
+</p>
 
-1. 不需要自己该名称,直接拖动进入文件夹后,运行`main.py`即可
+<p align="center">
+  [<a href="docs/README_EN.md">English</a>] | [<a href="docs/README_zh_TW.md">中文(繁體)</a>] | [<a href="docs/README_JP.md">日本語</a>]
+</p>
 
-2. 对于有服务器的,或者可以用`GitHub Action`接收件邮件, 自动下载附件并解压得到`csv`文件
+<div align="center">
+  <img src="./image/Bill_to_Notion_excalidraw.svg" alt="Bill_to_Notion_excalidraw" style="width:100%; height:auto;" />
+</div>
 
-3. 得到csv文件后便于后续操作
+## 其他说明
 
-4. 可以设置每月自动导出,发送至邮箱,随后执行自动化步骤,账单久能出现在`Notion`中
+> 寻找相关记账的模板，配合使用效果更佳哦。
+
+> 没有使用WeChat Pay以及Alipay的官方API）微信支付和支付宝官方API仅仅对商户开放使用，普通人目前无法使用。<br>
+详情点击:<br>
+    [简介-接口规则 | 微信支付商户平台文档中心](https://pay.weixin.qq.com/wiki/doc/apiv3/wechatpay/wechatpay-1.shtml) <br>
+    [查询账单接口 - 支付宝文档中心 (alipay.com)](https://opendocs.alipay.com/open-v3/b6ddabc9_alipay.ebpp.bill.get)
+
+> 灵感来源于**少数派**的[这篇文章](https://sspai.com/post/66658)，感谢少数派提供的思路。
+
+## 快速开始
+
+- 开通某个邮箱的IMAP协议，请自行互联网搜寻。这里给163邮箱的开通流程作为示例，[帮助中心_常见问题IMAP (163.com)](https://help.mail.163.com/faqDetail.do?code=d7a5dc8471cd0c0e8b4b8f4f8e49998b374173cfe9171305fa1ce630d7f67ac2a5feb28b66796d3b)
+
+- 导出账单，发送至邮箱
+<div align="center">
+  <img src="./image/wechatpay_bill.png" alt="wechatpay_bill" style="width:100%; height:auto;"/>
+  <img src="./image/alipay_bill.png" alt ="aliapy_bill" style="width:100%; height:auto;"/>
+</div>
+
+- 拷贝示例数据库，建议`duplicate`此[账单导入Notion模板](https://tsinglin.notion.site/68951a1caaba487a884cafcd5086810c?v=3d0c405e7cae405599aed2fe0f5233cc)，熟悉之后可自行修改
+
+- 自定义Notion Integration
+  <details>
+    <summary>Notion Integration</summary>
+    键入`https://www.notion.so/profile/integrations`
+
+    <img src="./image/Notion_Integration/Notion_Integration_step1.png" alt="Notion_Integration_step1" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step2.png" alt="Notion_Integration_step2" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step3.png" alt="Notion_Integration_step3" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step4.png" alt="Notion_Integration_step4" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step5.png" alt="Notion_Integration_step5" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step6.png" alt="Notion_Integration_step6" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step7.png" alt="Notion_Integration_step7" style="width:80%; height:auto;"/>
+    <img src="./image/Notion_Integration/Notion_Integration_step8.png" alt="Notion_Integration_step8" style="width:80%; height:auto;"/>
+  </details>
+
+- 下载本项目
+
+- 运行`config_duplicate.py`文件
+
+- 填写`config_private.yaml`文件，如下
+
+  ```yaml
+  email_config:
+    imap_url: "l3*********@163.com"
+    password: "HZ************TG"
+    username: "imap.163.com"
+
+  notion_config:
+    database_id: "c1a348********************4c7"  # 数据库ID
+    token: "secret_OHvKVP*******************Lq" # token
+  ```
+
+  <details>
+    <summary>database_id details</summary>
+    
+      https://www.notion.so/tsinglin/68111a1sssssss487a884cafcd5333310c?v=3d0c405e7cae405599aed2fe0f5233cc
+
+      database_id: 68111a1sssssss487a884cafcd5333310c
+
+  </details>
+
+- 账单发送到邮箱后，会有消息告知密码，请复制此密码，自己邮箱发送密码给自己，**格式必须如下**：
+  <details>
+  <summary>格式示例</summary>
+  <img src="./image/alipay_password.jpg" alt="Notion_Integration_step8" style="width:40%; height:auto;"/>
+
+  即自己发给自己且标题必须形为`alipay解压密码123456`或者`wechatpay解压密码123456`，原因是代码规定如此，改了必报错。
+  ```python
+  def get_passwd(self):
+    # 检查邮件发件邮箱是否是自己的邮箱
+    flag = False
+    if self.from_addr == self.username:
+        print("Subject,from get_passwd:", self.subject)
+        if self.payment_platform == "alipay":
+            if re.match("^alipay解压密码[0-9]{6}$", self.subject):
+                print("Subject:", self.subject)
+                self.paswd = self.subject[-6:]
+                print("Password:", self.paswd)
+                flag = True
+        elif self.payment_platform == "wechatpay":
+            if re.match("^wechatpay解压密码[0-9]{6}$", self.subject):
+                print("Subject:", self.subject)
+                self.paswd = self.subject[-6:]
+                print("Password:", self.paswd)
+                flag = True
+    return flag
+  ```
+  </details>
+- 运行`main.py`
+
+## 自定义
+
+pass
+
+## 下一步计划
+
+- `Linux`环境下自动化
+
+- 导入成功后邮件返回提醒
+
+- 可以设置每月自动导出提醒
