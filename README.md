@@ -5,7 +5,6 @@
 <p align="center"><b>WeChat and Alipay bills are sent to emails, and email attachments are extracted and imported into Notion</b></p>
 <p align="center"><b>微信和支付宝账单发送至邮箱，邮件提取附件导入Notion</b></p>
 
-
 <p align="center">
   <img alt="Static Badge" src="https://img.shields.io/badge/Notion-Integration-black">
   <img alt="Static Badge" src="https://img.shields.io/badge/WeChat%20Pay-Bill-green">
