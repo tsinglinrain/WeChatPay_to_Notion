@@ -3,7 +3,7 @@ import imaplib
 import email
 from email.header import decode_header
 from email.utils import parseaddr
-from bs4 import BeautifulSoup
+# from bs4 import BeautifulSoup
 from lxml import html
 import re
 import requests
