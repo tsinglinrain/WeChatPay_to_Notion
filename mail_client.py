@@ -79,6 +79,7 @@ class MailClient:
     def get_passwd(self):
         # 检查邮件发件邮箱是否是自己的邮箱
         flag = False
+        print("From:", self.from_addr)
         if self.from_addr == self.username:
             print("Subject,from get_passwd:", self.subject)
             if self.payment_platform == "alipay":
@@ -200,7 +201,7 @@ class MailClient:
 # 使用
 def main():
     # 加载 .yaml 文件
-    with open("config.yaml", "r") as file:
+    with open("config_private.yaml", "r", encoding="utf-8") as file:
         config = yaml.safe_load(file)
 
     # 获取配置变量

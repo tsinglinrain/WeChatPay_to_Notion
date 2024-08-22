@@ -25,6 +25,7 @@ class DataProcessor:
         if self.platform == "alipay":
             self.df["金额"] = self.df["金额"].map(lambda x: float(x))
             self.df["备注"] = self.df["备注"].fillna("")
+            self.df["商家订单号"] = self.df["商家订单号"].fillna("")
         elif self.platform == "wechatpay":
             self.df["金额(元)"] = self.df["金额(元)"].map(lambda x: float(x[1:]))
             # self.df["金额(元)"] = self.df["金额(元)"].map(lambda x: float(x[1:]) if isinstance(x, str) else x)

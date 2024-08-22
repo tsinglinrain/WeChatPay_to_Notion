@@ -50,9 +50,10 @@ def data_processor(payment_platform, path_std):
 
 def process_apply(notionclient, payment_platform):
     path_std = csv_transformer(payment_platform)
+    # path_std = "alipay_standard.csv"
     df_processed = data_processor(payment_platform, path_std)
+    # print(df_processed.head(7))
     df_processed.apply(notionclient.process_row, axis=1)
-    # print(df_processed.head(5))
 
 
 def main():

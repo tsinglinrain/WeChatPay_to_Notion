@@ -160,6 +160,10 @@ cython_debug/
 #.idea/
 
 config_private.yaml
-wechat_raw.csv
-wechat_standard.csv
-微信支付账单(.*).csv
+config_private*.yaml
+*_raw.csv
+*_standard.csv
+微信支付账单*.csv
+attachment/
+bill_csv_raw/
+*test*
