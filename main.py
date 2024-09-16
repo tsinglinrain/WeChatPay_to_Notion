@@ -44,9 +44,25 @@ def bill_to_notion(payment_platform):
 
 
 def main():
-    # payment_platform="alipay"
-    payment_platform = "wechatpay"
-    bill_to_notion(payment_platform)
+    flag = input("Which platform's billing data do you want to import, or all of them? \n(0(wechatpay), 1(alipay), 2(all)): ")
+    flag = int(flag)
+    try:
+        if flag == 0:
+            payment_platform = ("wechatpay",)
+        elif flag == 1:
+            payment_platform = ("alipay",)
+        elif flag == 2:
+            payment_platform = ("alipay", "wechatpay")
+        else:
+            raise ValueError("Invalid input, please enter 0, 1 or 2.")
+    except:
+        raise ValueError("Invalid input, please enter 0, 1 or 2.")
+
+    for payment_platform in payment_platform:
+        print(f"Processing {payment_platform}...")
+        bill_to_notion(payment_platform)
+        print(f"{payment_platform} processed successfully!")
+        print("========================================")
 
 
 if __name__ == "__main__":
