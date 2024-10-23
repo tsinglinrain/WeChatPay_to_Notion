@@ -125,3 +125,7 @@ pass
 - 导入成功后邮件返回提醒
 
 - 可以设置每月自动导出提醒
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=tsinglinrain/WeChatPay_to_Notion&type=Date)](https://star-history.com/#tsinglinrain/WeChatPay_to_Notion&Date)
