@@ -167,3 +167,4 @@ config_private*.yaml
 attachment/
 bill_csv_raw/
 *test*
+.vscode/
