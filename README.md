@@ -61,6 +61,12 @@
 
 - 下载本项目
 
+- 安装所需库
+
+  ```python
+  pip install -r requirements.txt
+  ```
+
 - 运行`config_duplicate.py`文件
 
 - 填写`config_private.yaml`文件，如下
