@@ -120,7 +120,7 @@ class MailClient:
             with open(os.path.join("attachment", filename), "wb") as f:
                 f.write(payload)
 
-        # 如果payload是HTML类型，尝试从中提取网址,微信就是
+        # 如果payload是HTML类型,尝试从中提取网址,微信就是
         if part.get_content_type() == "text/html":
             # soup = BeautifulSoup(part.get_payload(decode=True), 'html.parser')
             # link_elements = soup.find_all('a')
