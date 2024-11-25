@@ -17,10 +17,16 @@
   [<a href="docs/README_EN.md">English</a>] | [<a href="docs/README_zh_TW.md">中文(繁體)</a>] | [<a href="docs/README_JP.md">日本語</a>]
 </p>
 
-<div align="center">
-  <img src="./image/Bill_to_Notion_excalidraw.svg" alt="Bill_to_Notion_excalidraw" style="width:100%; height:auto;" />
+  <div align="center">
+    <img src="./image/Bill2Notion_zh_cn.excalidraw.svg" alt="Bill2Notion_zh_cn" style="width:100%; height:auto;" />
+  </div>
+  
+<details>
+  <summary>项目具体偏向代码的流程图</summary>
+    <div align="center">
+      <img src="./image/Bill_to_Notion_excalidraw.svg" alt="Bill_to_Notion_excalidraw" style="width:100%; height:auto;" />
 </div>
-
+</details>
 ## 其他说明
 
 > 寻找相关记账的模板，配合使用效果更佳哦。
