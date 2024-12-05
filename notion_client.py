@@ -49,6 +49,7 @@ class NotionClient:
         transaction_number="",
         merchant_tracking_number="",
         payment_method="undefined",
+        time_zone="Asia/Shanghai",
     ):
         """将输入的内容转换为notion的json格式
         Args:
@@ -62,6 +63,7 @@ class NotionClient:
             merchant_tracking_number (str, optional): 商家订单号. Defaults to ""
             payment_method (str, optional): 支付方式. Defaults to ""
             payment_platform (str, optional): 支付平台. Defaults to ""
+            time_zone (str, optional): 时区. Defaults to "Asia/Shanghai"
         Returns:
             properties: 返回notion的json格式
         """
@@ -73,7 +75,7 @@ class NotionClient:
             "Date": {
                 "date": {
                     "start": date,
-                    "time_zone": "Asia/Shanghai",  # 时区, 参见官方文档
+                    "time_zone": time_zone,  # 时区, 参见官方文档
                 }
             },
             "From": {"select": {"name": payment_platform_dict[self.payment_platform]}},
