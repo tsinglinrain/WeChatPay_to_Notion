@@ -14,7 +14,7 @@
 </p>
 
 <p align="center">
-  [<a href="docs/README_EN.md">English</a>] | [<a href="docs/README_zh_TW.md">中文(繁體)</a>] | [<a href="docs/README_JP.md">日本語</a>]
+  [<a href="docs/README_EN.md">English</a>] | [<a href="docs/README_zh_Hant.md">中文(繁體)</a>]
 </p>
 
 <div align="center">
