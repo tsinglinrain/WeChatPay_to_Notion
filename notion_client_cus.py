@@ -1,42 +1,34 @@
 import requests
+from notion_client import Client
 
 
 class NotionClient:
     def __init__(self, database_id, token, payment_platform):
         self.database_id = database_id
         self.token = token
-
+        self.client: Client = Client(auth=token)
         self.payment_platform = payment_platform
 
-    def create_notion_page(self, properties):
+    def create_page(self, properties):
+        """Create a new page in the database"""
 
-        url = "https://api.notion.com/v1/pages"
-        payload = {
-            "parent": {"database_id": self.database_id},
-            "properties": properties,
-            # "children": ["string"],    # 不需要children
-            # "icon": "string",
-            # "cover": "string"
-        }
-        headers = {
-            "accept": "application/json",
-            "Notion-Version": "2022-06-28",  # 版本号
-            "content-type": "application/json",
-            "Authorization": "".join(
-                ["Bearer", " ", self.token]
-            ),  # 注意空格, 之前没注意空格, 一直报错
-        }
-        response = requests.post(url, json=payload, headers=headers)
-        return response
-
-    @staticmethod
-    def response_result(response):
-
-        if response.status_code == 200:
-            print("成功...")
-        else:
-            print("失败...")
-            print(response.text)
+        try:
+            self.client.pages.create(
+                # icon = {
+                #     "external": {
+                #         "url": icon_url  # 使用上传文件的 URL 作为图标
+                #     }
+                # },    # 我个人没有这个需求,如果有,可以加上
+                # cover # 也没有需求
+                parent={"database_id": self.database_id},
+                properties=properties,
+                # children=blocks,  # 不要children
+            )
+            print("Page created successfully\n上传成功")
+        except Exception as e:
+            print(f"Failed to create page: {e}")
+            print("-" * 20)
+            print("上传失败,自动跳过,请自行检查")
 
     def notion_property(
         self,
@@ -118,5 +110,4 @@ class NotionClient:
             )
         else:
             raise ValueError("Invalid payment platform")
-        response = self.create_notion_page(properties)
-        NotionClient.response_result(response)
+        self.create_page(properties)

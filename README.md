@@ -7,10 +7,11 @@
 
 <p align="center">
   <img alt="Static Badge" src="https://img.shields.io/badge/Notion-Integration-black">
-  <img alt="Static Badge" src="https://img.shields.io/badge/WeChat%20Pay-Bill-green">
-  <img alt="Static Badge" src="https://img.shields.io/badge/Alipay-Bill-blue">
-  <img alt="Static Badge" src="https://img.shields.io/badge/Code_style-black-black">
-  <img alt="Static Badge" src="https://img.shields.io/badge/Python-green">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Bill-WeChat%20Pay-1AAD19">
+  <img alt="Static Badge" src="https://img.shields.io/badge/Bill-Alipay-1890FF">
+  <a href="https://github.com/ambv/black"><img alt="Static Badge" src="https://img.shields.io/badge/code_style-black-black"></a>
+  <img alt="Static Badge" src="https://img.shields.io/badge/Python-3-green">
+  <a href="https://github.com/ramnes/notion-sdk-py"><img alt="Static Badge" src="https://img.shields.io/badge/notion--sdk--py-notion--client-blue"></a>
 </p>
 
 <p align="center">

@@ -1,6 +1,6 @@
 import main_mail
 import main_notion
-from notion_client import NotionClient
+from notion_client_cus import NotionClient
 from mail_client import MailClient
 import config_duplicate
 
