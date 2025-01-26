@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./image/icon_good2.svg" alt="Bill2NotionLogo" style="width:12%; height:auto;" />
+  <img src="./image/Bill2notion24.svg" alt="Bill2NotionLogo" style="width:12%; height:auto;" />
 </div>
 
 <p align="center"><b>WeChat and Alipay bills are sent to emails, and email attachments are extracted and imported into Notion</b></p>
