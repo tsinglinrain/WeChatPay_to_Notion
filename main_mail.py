@@ -1,6 +1,6 @@
-from mail_client import MailClient
-from unzip_att import FileExtractor
-from move_file import FileMover
+from mail_core.mail_client import MailClient
+from mail_core.unzip_att import FileExtractor
+from mail_core.move_file import FileMover
 import yaml
 
 

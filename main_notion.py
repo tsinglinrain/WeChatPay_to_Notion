@@ -1,8 +1,8 @@
 import yaml
 
-from notion_client_cus import NotionClient
-from data_processor import DataProcessor
-from csv_transformer import CsvTransformer
+from notion_core.notion_client_cus import NotionClient
+from mail_core.data_processor import DataProcessor
+from mail_core.csv_transformer import CsvTransformer
 
 
 def config_loader():

@@ -1,6 +1,6 @@
 # 仅用于测试，实际使用时可能会将此部分代码整合至main.py中
 
-from mail_client import MailClient
+from mail_core.mail_client import MailClient
 import yaml
 
 

@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./image/Bill2notion24.svg" alt="Bill2NotionLogo" style="width:12%; height:auto;" />
+  <img src="./image/logo/Bill2notion24.svg" alt="Bill2NotionLogo" style="width:12%; height:auto;" />
 </div>
 
 <p align="center"><b>WeChat and Alipay bills are sent to emails, and email attachments are extracted and imported into Notion</b></p>
@@ -25,6 +25,13 @@
 <div align="center">
   <img src="./image/Bill2Notion_zh_cn.excalidraw.svg" alt="Bill2Notion_zh_cn" style="width:100%; height:auto;" />
 </div>
+
+<details>
+  <summary>导入效果静态图</summary>
+    <div align="center">
+      <img src="./image/visualization_static.png" alt="visualization_static" style="width:100%; height:auto;" />
+</div>
+</details>
 
 <details>
   <summary>项目具体偏向代码的流程图</summary>
