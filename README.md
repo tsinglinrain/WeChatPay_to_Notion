@@ -53,7 +53,9 @@
 
 ## 快速开始
 
-- 开通某个邮箱的IMAP协议，请自行互联网搜寻。这里给163邮箱的开通流程作为示例，[帮助中心_常见问题IMAP (163.com)](https://help.mail.163.com/faqDetail.do?code=d7a5dc8471cd0c0e8b4b8f4f8e49998b374173cfe9171305fa1ce630d7f67ac2a5feb28b66796d3b)
+- 开通某个邮箱的IMAP协议，请自行互联网搜寻。
+- 这里给163邮箱的开通流程作为示例，[帮助中心_常见问题IMAP (163.com)](https://help.mail.163.com/faqDetail.do?code=d7a5dc8471cd0c0e8b4b8f4f8e49998b374173cfe9171305fa1ce630d7f67ac2a5feb28b66796d3b)
+- 这里给出QQ邮箱示例，[QQ邮箱开通IMAP步骤](https://i.mail.qq.com/app/app_register_help/imap_163.html)
 
 - 导出账单，发送至邮箱
 <div align="center">
@@ -63,9 +65,13 @@
 
 - 拷贝示例数据库，建议`duplicate`此[账单导入Notion模板](https://tsinglin.notion.site/68951a1caaba487a884cafcd5086810c?v=3d0c405e7cae405599aed2fe0f5233cc)，熟悉之后可自行修改
 
-- 自定义Notion Integration
+- 内部集成认证流程设置
+  
   <details>
     <summary>Notion Integration</summary>
+
+    可以参考官方文档[Internal integration auth flow set-up](https://developers.notion.com/docs/authorization)
+
     键入`https://www.notion.so/profile/integrations`
 
     <img src="./image/Notion_Integration/Notion_Integration_step1.png" alt="Notion_Integration_step1" style="width:80%; height:auto;"/>
@@ -110,9 +116,13 @@
 
   </details>
 
-- 账单发送到邮箱后，会有消息告知密码，请复制此密码，自己邮箱发送密码给自己，**格式必须如下**：
+- 账单发送到邮箱后，会有消息告知密码。请复制此密码，**自己邮箱发送密码给自己**，**格式必须如下**：
+  ```text
+  wechatpay解压密码110110
+  alipay解压密码110110
+  ```
   <details>
-  <summary>格式示例</summary>
+  <summary>格式具体示例</summary>
   <img src="./image/alipay_password.jpg" alt="Notion_Integration_step8" style="width:40%; height:auto;"/>
 
   即自己发给自己且标题必须形为`alipay解压密码123456`或者`wechatpay解压密码123456`，原因是代码规定如此，改了必报错。
