@@ -1,3 +1,3 @@
 <div align="center">
-<img src="./image/wechatpay_bill.png" alt="Bill2NotionLogo" style="width:100%; height:auto;" />
+<img src="../image/logo/Alipay_and_WeChatPay.excalidraw2.svg" alt="Bill2NotionLogo" style="width:100%; height:auto;" />
 </div>

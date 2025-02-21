@@ -1,8 +1,8 @@
 import yaml
 
-from notion_client import NotionClient
-from data_processor import DataProcessor
-from csv_transformer import CsvTransformer
+from notion_core.notion_client_cus import NotionClient
+from mail_core.data_processor import DataProcessor
+from mail_core.csv_transformer import CsvTransformer
 
 
 def config_loader():
@@ -48,7 +48,7 @@ def data_processor(payment_platform, path_std):
     return df_processed
 
 
-def process_apply(notionclient, payment_platform):
+def process_apply(notionclient:NotionClient, payment_platform):
     path_std = csv_transformer(payment_platform)
     # path_std = "alipay_standard.csv"
     df_processed = data_processor(payment_platform, path_std)

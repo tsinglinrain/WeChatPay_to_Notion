@@ -2,3 +2,4 @@ requests
 pyyaml
 pandas
 lxml
+notion-client

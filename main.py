@@ -1,7 +1,7 @@
-import main_mail
-import main_notion
-from notion_client import NotionClient
-from mail_client import MailClient
+import main_mail as main_mail
+import main_notion as main_notion
+from notion_core.notion_client_cus import NotionClient
+from mail_core.mail_client import MailClient
 import config_duplicate
 
 
