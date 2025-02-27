@@ -201,8 +201,9 @@ class MailClient:
 
 # 使用
 def main():
-    # 加载 .yaml 文件
-    with open("config_private.yaml", "r", encoding="utf-8") as file:
+    # 加载 .yaml 文件,文件在上一级目录
+    config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config_private.yaml")
+    with open(config_path, "r", encoding="utf-8") as file:
         config = yaml.safe_load(file)
 
     # 获取配置变量
