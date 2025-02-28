@@ -51,9 +51,16 @@ class MailClient:
     def get_mail_info(self, num):
         """获取邮件信息,包括发件人,主题"""
         result, data = self.mail.uid("fetch", num, "(BODY.PEEK[])")
-        raw_email = data[0][1].decode("utf-8")
-        self.email_message:Message = email.message_from_string(raw_email)
-
+        raw_email_bytes = data[0][1]
+        try:
+            # 尝试自动检测编码
+            self.email_message: Message = email.message_from_bytes(raw_email_bytes)
+            print("try to decode email_message automatically")
+        except:
+            # 如果失败则使用默认编码并替换错误字节
+            raw_email = raw_email_bytes.decode('utf-8', errors='replace')
+            self.email_message: Message = email.message_from_string(raw_email)
+            print("decode email_message with utf-8 and replace errors")
         # 获取邮件发件人
         from_header_parts = decode_header(self.email_message["From"])
         from_header = "".join(
