@@ -30,7 +30,7 @@ def config_loader():
     return username, password, imap_url, database_id, token
 
 
-def get_attachment(client):
+def get_attachment(client:MailClient):
     """获取附件"""
     for num in reversed(client.email_list):
         client.get_mail_info(num)

@@ -41,7 +41,7 @@ class MailClient:
         self.mail.login(self.username, self.password)
 
         result_sel, data_sel = self.mail.select("inbox")
-        print(f"login statue: {result_sel}, {data_sel}")
+        print(f"login status: {result_sel}, {data_sel}")
 
     def fetch_mail(self):
         # 搜索邮件
@@ -193,7 +193,7 @@ class MailClient:
 
         if self.from_addr == payment_platform_dict[self.payment_platform]:
 
-            print("Subject:", self.subject)
+            print("Subject, From fetch_mail_attachment:", self.subject)
             self.walk_message(self.email_message)
             flag = True
             return flag
