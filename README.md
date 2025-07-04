@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./image/logo/Bill2notion24.svg" alt="Bill2NotionLogo" style="width:12%; height:auto;" />
+  <img src="https://socialify.git.ci/tsinglinrain/YuriAudio2Notion/image?description=1&font=Jost&language=1&logo=https%3A%2F%2Fgithub.com%2Ftsinglinrain%2FWeChatPay_to_Notion%2Fraw%2Fmain%2Fimage%2Flogo%2FBill2notion24.svg&name=1&owner=1&pattern=Brick+Wall&theme=Light" alt="YuriAudio2Notion" width="640" height="320" />
 </div>
 
 <p align="center"><b>WeChat and Alipay bills are sent to emails, and email attachments are extracted and imported into Notion</b></p>
