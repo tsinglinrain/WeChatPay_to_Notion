@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="https://socialify.git.ci/tsinglinrain/WeChatPay_to_Notion/image?custom_description=WeChat+and+Alipay+bills+are+sent+to+emails%2C+and+email+attachments+are+extracted+and+imported+into+Notion&description=1&font=Jost&language=1&logo=https%3A%2F%2Fgithub.com%2Ftsinglinrain%2FWeChatPay_to_Notion%2Fraw%2Fmain%2Fimage%2Flogo%2FBill2notion24.svg&name=1&owner=1&pattern=Brick+Wall&theme=Light" alt="WeChatPay_to_Notion" width="640" height="320" />
+  <img src="https://socialify.git.ci/tsinglinrain/WeChatPay_to_Notion/image?custom_description=WeChat+and+Alipay+bills+are+sent+to+emails%2C+and+email+attachments+are+extracted+and+imported+into+Notion.%0A%E5%BE%AE%E4%BF%A1%E5%92%8C%E6%94%AF%E4%BB%98%E5%AE%9D%E8%B4%A6%E5%8D%95%E5%8F%91%E9%80%81%E8%87%B3%E9%82%AE%E7%AE%B1%EF%BC%8C%E9%82%AE%E4%BB%B6%E6%8F%90%E5%8F%96%E9%99%84%E4%BB%B6%E5%AF%BC%E5%85%A5Notion&description=1&font=Jost&language=1&logo=https%3A%2F%2Fgithub.com%2Ftsinglinrain%2FWeChatPay_to_Notion%2Fraw%2Fmain%2Fimage%2Flogo%2FBill2notion24.svg&name=1&owner=1&pattern=Brick+Wall&theme=Light" alt="WeChatPay_to_Notion" width="640" height="320" />
 </div>
 
 <p align="center"><b>WeChat and Alipay bills are sent to emails, and email attachments are extracted and imported into Notion</b></p>
