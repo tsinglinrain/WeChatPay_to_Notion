@@ -89,20 +89,22 @@
   pip install -r requirements.txt
   ```
 
-- 运行`config_duplicate.py`文件
+- **新版本配置方式（推荐）**: 使用环境变量配置
 
-- 填写`config_private.yaml`文件，如下
+  本项目现在支持环境变量配置，更适合Docker部署：
 
-  ```yaml
-  email_config:
-    imap_url: "l3*********@163.com"
-    password: "HZ************TG"
-    username: "imap.163.com"
-
-  notion_config:
-    database_id: "c1a348********************4c7"  # 数据库ID
-    token: "secret_OHvKVP*******************Lq" # token
+  ```bash
+  # 1. 复制环境变量模板文件
+  cp .env.template .env
+  
+  # 2. 编辑 .env 文件，填入您的配置信息
+  # EMAIL_USERNAME=your_email@example.com
+  # EMAIL_PASSWORD=your_email_password
+  # EMAIL_IMAP_URL=imap.example.com
+  # NOTION_DATABASE_ID=your_notion_database_id
+  # NOTION_TOKEN=your_notion_token
   ```
+
 
   <details>
     <summary>database_id details</summary>
@@ -144,7 +146,47 @@
     return flag
   ```
   </details>
+
+## 运行
+
+### 本地Python运行
+
 - 运行`main.py`
+
+  ```bash
+  python main.py
+  ```
+
+### Docker运行(暂时没有上线)
+
+- **使用 docker compose（推荐）**
+
+  ```bash
+  # 1. 确保已配置 .env 文件
+  cp .env.template .env
+  # 编辑 .env 文件填入配置信息
+  
+  # 2. 构建并运行
+  docker compose up --build
+  ```
+
+- **直接使用 Docker**
+
+  ```bash
+  # 构建镜像
+  docker build -t wechatpay-to-notion .
+  
+  # 运行容器
+  docker run --rm \
+    -e EMAIL_USERNAME="your_email@example.com" \
+    -e EMAIL_PASSWORD="your_email_password" \
+    -e EMAIL_IMAP_URL="imap.example.com" \
+    -e NOTION_DATABASE_ID="your_notion_database_id" \
+    -e NOTION_TOKEN="your_notion_token" \
+    -v $(pwd)/attachment:/app/attachment \
+    -v $(pwd)/bill_csv_raw:/app/bill_csv_raw \
+    wechatpay-to-notion
+  ```
 
 ## 自定义
 
