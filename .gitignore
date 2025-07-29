@@ -161,6 +161,9 @@ cython_debug/
 
 config_private.yaml
 config_private*.yaml
+.env
+.env.local
+.env.*.local
 *_raw.csv
 *_standard.csv
 微信支付账单*.csv

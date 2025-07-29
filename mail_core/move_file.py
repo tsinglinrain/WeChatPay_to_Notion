@@ -11,7 +11,7 @@ class FileMover:
     def find_latest_file(self):
         latest_file = ""
         latest_time = 0
-        name = {"alipay": "alipay_record", "wechatpay": "微信支付账单"}
+        name = {"alipay": "支付宝交易明细", "wechatpay": "微信支付账单"}
         for foldername, subfolders, filenames in os.walk(self.source_dir):
             for filename in filenames:
                 if filename.startswith(name[self.payment_platform]):

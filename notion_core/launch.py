@@ -1,20 +1,17 @@
 # 仅用于测试，实际使用时可能会将此部分代码整合至main.py中
 
 from mail_core.mail_client import MailClient
-import yaml
+import config_env
 
 
 def main():
-    # 加载 .yaml 文件
+    # 从环境变量加载配置
     flag = False
-    with open("config.yaml", "r") as file:
-        config = yaml.safe_load(file)
-
-    # 获取配置变量
-    email_config = config.get("email_config", {})
-    username, password, imap_url = (
-        i for i in email_config.values()
-    )  # 写成这样更简洁,但需要注意顺序
+    try:
+        username, password, imap_url = config_env.get_email_config()
+    except ValueError as e:
+        print(f"配置错误: {e}")
+        return
 
     client = MailClient(username, password, imap_url)
     client.connect()

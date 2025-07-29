@@ -17,7 +17,7 @@ class FileExtractor:
         self.payment_platform = payment_platform
 
     def search_files(self):
-        text_start = {"alipay": "交易流水证明", "wechatpay": "微信支付账单"}
+        text_start = {"alipay": "支付宝交易明细", "wechatpay": "微信支付账单"}
         files = [
             f
             for f in os.listdir(self.attachment_path)

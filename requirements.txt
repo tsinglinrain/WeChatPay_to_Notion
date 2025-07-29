@@ -1,5 +1,5 @@
 requests
-pyyaml
+python-dotenv
 pandas
 lxml
 notion-client

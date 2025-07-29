@@ -1,4 +1,4 @@
-import yaml
+import config_env
 
 from notion_core.notion_client_cus import NotionClient
 from mail_core.data_processor import DataProcessor
@@ -6,19 +6,11 @@ from mail_core.csv_transformer import CsvTransformer
 
 
 def config_loader():
-    # 加载 .yaml 文件
-    with open("config_private.yaml", "r", encoding="utf-8") as file:
-        config = yaml.safe_load(file)
-
-    # 获取配置变量
-    email_config = config.get("email_config", {})
-
-    username, password, imap_url = (i for i in email_config.values())
-
-    notion_config = config.get("notion_config", {})
-    database_id, token = (i for i in notion_config.values())
-
-    return username, password, imap_url, database_id, token
+    """
+    从环境变量加载配置
+    返回: (username, password, imap_url, database_id, token)
+    """
+    return config_env.config_loader()
 
 
 def csv_transformer(payment_platform):
