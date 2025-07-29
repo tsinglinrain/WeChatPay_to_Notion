@@ -1,6 +1,6 @@
 import os
 import shutil
-
+import pandas as pd
 
 class FileMover:
     def __init__(self, source_dir, target_dir, payment_platform):
@@ -26,29 +26,48 @@ class FileMover:
         name = {"alipay": "alipay_raw", "wechatpay": "wechatpay_raw"}
         source_file = self.find_latest_file()
         if source_file:
-            shutil.copy2(source_file, self.target_dir)
-            extension = os.path.splitext(source_file)[1]  # 获取源文件的扩展名
-            # 创建新的文件路径
-            new_file_path = os.path.join(
-                self.target_dir, name[self.payment_platform] + extension
-            )
-            # 如果目标文件已存在，先删除它
-            if os.path.exists(new_file_path):
-                os.remove(new_file_path)
-            # 重命名文件
-            os.rename(
-                os.path.join(self.target_dir, os.path.basename(source_file)),
-                new_file_path,
-            )
+            if self.payment_platform == "wechatpay":
+                # 微信账单需要转换为csv
+                self.excel_to_csv()
+            else:
+                shutil.copy2(source_file, self.target_dir)
+                extension = os.path.splitext(source_file)[1]  # 获取源文件的扩展名
+                # 创建新的文件路径
+                new_file_path = os.path.join(
+                    self.target_dir, name[self.payment_platform] + extension
+                )
+                # 如果目标文件已存在，先删除它
+                if os.path.exists(new_file_path):
+                    os.remove(new_file_path)
+                # 重命名文件
+                os.rename(
+                    os.path.join(self.target_dir, os.path.basename(source_file)),
+                    new_file_path,
+                )
         else:
             print("No file found to copy.")
 
+    def excel_to_csv(self):
+        '''专门处理微信账单的excel转csv'''
+        if self.payment_platform != "wechatpay":
+            print("This method is only for WeChat Pay bills.")
+            return
+        name = {"alipay": "alipay_raw", "wechatpay": "wechatpay_raw"}
+        source_file = self.find_latest_file()
+        if source_file:
+            df = pd.read_excel(source_file)
+            csv_path = os.path.join(self.target_dir, name[self.payment_platform] + ".csv")
+            df.to_csv(csv_path, index=False)
+            print(f"Converted {source_file} to {csv_path}")
+        else:
+            print("No file found to convert.")
 
 def main():
     csv_csv_path = "bill_csv_raw"
     target_path = "./"
     name = {"alipay": "alipay_raw", "wechatpay": "wechatpay_raw"}
     mover = FileMover(csv_csv_path, target_path, "wechatpay")
+    mover.excel_to_csv()
     mover.copy_file()
 
 

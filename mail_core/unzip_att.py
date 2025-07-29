@@ -1,6 +1,8 @@
 import os
-import zipfile
 from datetime import datetime
+import zipfile
+import patoolib
+import pyzipper
 
 
 class FileExtractor:
@@ -39,33 +41,112 @@ class FileExtractor:
         # print(date_str)
         return datetime.strptime(date_str, "%Y%m%d")
 
+    def check_zip_compatibility(self, zip_path):
+        """检查ZIP文件是否可以用标准zipfile模块处理"""
+        try:
+            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                # 检查所有文件的压缩方法
+                for info in zip_ref.infolist():
+                    if info.compress_type not in [0, 8]:  # ZIP_STORED, ZIP_DEFLATED
+                        return False, f"不支持的压缩方法: {info.compress_type}"
+                return True, "兼容"
+        except Exception as e:
+            return False, str(e)
+
+    def extract_with_zipfile(self, zip_path, file_name):
+        """使用标准zipfile解压"""
+        try:
+            with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+                zip_ref.extractall(
+                    self.target_folder_path,
+                    pwd=self.attachment_password.encode() if self.attachment_password else None
+                )
+            return True, f"Successfully extracted {file_name} using zipfile"
+        except Exception as e:
+            return False, f"zipfile extraction failed: {e}"
+
+
+    def extract_with_pyzipper(self, zip_path, file_name):
+        """使用pyzipper解压不兼容的ZIP文件"""
+        try:
+            with pyzipper.AESZipFile(zip_path, 'r') as zip_ref:
+                zip_ref.extractall(
+                    self.target_folder_path,
+                    pwd=self.attachment_password.encode() if self.attachment_password else None
+                )
+            return True, f"Successfully extracted {file_name} using pyzipper (AES)"
+        except Exception as e:
+            # 如果AES失败，尝试传统ZIP
+            try:
+                with pyzipper.ZipFile(zip_path, 'r') as zip_ref:
+                    zip_ref.extractall(
+                        self.target_folder_path,
+                        pwd=self.attachment_password.encode() if self.attachment_password else None
+                    )
+                return True, f"Successfully extracted {file_name} using pyzipper"
+            except Exception as e2:
+                return False, f"pyzipper extraction failed: AES error: {e}, Standard error: {e2}"
+
+    def extract_with_patoolib(self, zip_path, file_name):
+        """使用patoolib解压不兼容的ZIP文件"""
+        try:
+            # patoolib.extract_archive 不直接支持密码参数
+            # 但我们可以尝试使用环境变量或其他方法
+            patoolib.extract_archive(zip_path, outdir=self.target_folder_path)
+            return True, f"Successfully extracted {file_name} using patoolib"
+        except Exception as e:
+            return False, f"patoolib extraction failed: {e}"
+
     def unzip_earliest_file(self, files):
         if not files:
             return "No zip files found in directory."
 
-        # latest_file = max(zip_files, key=self.extract_date_from_filename)
-        latest_file = max(
-            files, key=lambda f: os.path.getmtime(os.path.join(self.attachment_path, f))
+        # 按修改时间排序文件（最新的在前）
+        sorted_files = sorted(
+            files, 
+            key=lambda f: os.path.getmtime(os.path.join(self.attachment_path, f)), 
+            reverse=True
         )
-        with zipfile.ZipFile(
-            os.path.join(self.attachment_path, latest_file), "r"
-        ) as zip_ref:
-            zip_ref.extractall(
-                self.target_folder_path,
-                pwd=self.attachment_password and self.attachment_password.encode(),
-            )
-        return f"Extracted {latest_file} to {self.target_folder_path}."
+        earliest_file = sorted_files[0]
+        zip_path = os.path.join(self.attachment_path, earliest_file)
+        
+        # 首先检查兼容性
+        is_compatible, msg = self.check_zip_compatibility(zip_path)
+        
+        # 尝试用标准zipfile解压
+        success, message = self.extract_with_zipfile(zip_path, earliest_file)
+        if success:
+            return message
+        else:
+            print(f"zipfile解压失败: {message}")
+        
+        # 如果标准zipfile失败，尝试pyzipper
+        success, message = self.extract_with_pyzipper(zip_path, earliest_file)
+        if success:
+            return message
+        else:
+            print(f"pyzipper解压失败: {message}")
+            
+        # 如果pyzipper也失败，尝试patoolib
+        success, message = self.extract_with_patoolib(zip_path, earliest_file)
+        if success:
+            return message
+        else:
+            print(f"patoolib解压失败: {message}")
+        
+        return "No zip files could be extracted with any method."
 
 
 def main():
     path_att = "./attachment"
     path_target = "./bill_csv_raw"
 
-    payment_platform = "alipay"
-    # password = "473396" # wechatpay
-    password = "749350"  # alipay
+    payment_platform = "wechatpay"
+    # password = "473396"  # alipay
+    password = "047409"  # wechatpay
     extractor = FileExtractor(path_att, path_target, password, payment_platform)
     files = extractor.search_files()
+    print(files)
     msg = extractor.unzip_earliest_file(files)
     print(msg)
 
