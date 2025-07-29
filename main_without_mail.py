@@ -26,7 +26,9 @@ def bill_to_notion(payment_platform):
 
 
 def main():
-    flag = input("Which platform's billing data do you want to import, or all of them? \n(0(wechatpay), 1(alipay), 2(all)): ")
+    flag = input(
+        "Which platform's billing data do you want to import, or all of them? \n(0(wechatpay), 1(alipay), 2(all)): "
+    )
     flag = int(flag)
     try:
         if flag == 0:

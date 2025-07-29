@@ -22,7 +22,7 @@ def config_loader():
     return config_env.config_loader()
 
 
-def get_attachment(client:MailClient):
+def get_attachment(client: MailClient):
     """获取附件"""
     for num in reversed(client.email_list):
         client.get_mail_info(num)

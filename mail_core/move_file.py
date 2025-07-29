@@ -2,6 +2,7 @@ import os
 import shutil
 import pandas as pd
 
+
 class FileMover:
     def __init__(self, source_dir, target_dir, payment_platform):
         self.source_dir = source_dir
@@ -48,7 +49,7 @@ class FileMover:
             print("No file found to copy.")
 
     def excel_to_csv(self):
-        '''专门处理微信账单的excel转csv'''
+        """专门处理微信账单的excel转csv"""
         if self.payment_platform != "wechatpay":
             print("This method is only for WeChat Pay bills.")
             return
@@ -56,11 +57,14 @@ class FileMover:
         source_file = self.find_latest_file()
         if source_file:
             df = pd.read_excel(source_file)
-            csv_path = os.path.join(self.target_dir, name[self.payment_platform] + ".csv")
+            csv_path = os.path.join(
+                self.target_dir, name[self.payment_platform] + ".csv"
+            )
             df.to_csv(csv_path, index=False)
             print(f"Converted {source_file} to {csv_path}")
         else:
             print("No file found to convert.")
+
 
 def main():
     csv_csv_path = "bill_csv_raw"

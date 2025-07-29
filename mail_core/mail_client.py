@@ -4,6 +4,7 @@ import email
 from email.header import decode_header
 from email.utils import parseaddr
 from email.message import Message
+
 # from bs4 import BeautifulSoup
 from lxml import html
 import re
@@ -52,7 +53,7 @@ class MailClient:
         """获取邮件信息,包括发件人,主题"""
         result, data = self.mail.uid("fetch", num, "(BODY.PEEK[])")
         raw_email = data[0][1].decode("utf-8")
-        self.email_message:Message = email.message_from_string(raw_email)
+        self.email_message: Message = email.message_from_string(raw_email)
 
         # 获取邮件发件人
         from_header_parts = decode_header(self.email_message["From"])
@@ -98,7 +99,7 @@ class MailClient:
         return flag
 
     @staticmethod
-    def walk_message(part:Message, count=0):
+    def walk_message(part: Message, count=0):
         if not os.path.exists("attachment"):
             os.makedirs("attachment")
 
@@ -202,7 +203,9 @@ class MailClient:
 # 使用
 def main():
     # 加载 .yaml 文件,文件在上一级目录
-    config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), "config_private.yaml")
+    config_path = os.path.join(
+        os.path.dirname(os.path.dirname(__file__)), "config_private.yaml"
+    )
     with open(config_path, "r", encoding="utf-8") as file:
         config = yaml.safe_load(file)
 
