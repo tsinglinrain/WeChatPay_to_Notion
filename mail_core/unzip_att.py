@@ -1,7 +1,6 @@
 import os
 from datetime import datetime
 import zipfile
-import patoolib
 import pyzipper
 
 
@@ -101,16 +100,6 @@ class FileExtractor:
                     f"pyzipper extraction failed: AES error: {e}, Standard error: {e2}",
                 )
 
-    def extract_with_patoolib(self, zip_path, file_name):
-        """使用patoolib解压不兼容的ZIP文件"""
-        try:
-            # patoolib.extract_archive 不直接支持密码参数
-            # 但我们可以尝试使用环境变量或其他方法
-            patoolib.extract_archive(zip_path, outdir=self.target_folder_path)
-            return True, f"Successfully extracted {file_name} using patoolib"
-        except Exception as e:
-            return False, f"patoolib extraction failed: {e}"
-
     def unzip_earliest_file(self, files):
         if not files:
             return "No zip files found in directory."
@@ -123,9 +112,6 @@ class FileExtractor:
         )
         earliest_file = sorted_files[0]
         zip_path = os.path.join(self.attachment_path, earliest_file)
-
-        # 首先检查兼容性
-        is_compatible, msg = self.check_zip_compatibility(zip_path)
 
         # 尝试用标准zipfile解压
         success, message = self.extract_with_zipfile(zip_path, earliest_file)
@@ -140,13 +126,6 @@ class FileExtractor:
             return message
         else:
             print(f"pyzipper解压失败: {message}")
-
-        # 如果pyzipper也失败，尝试patoolib
-        success, message = self.extract_with_patoolib(zip_path, earliest_file)
-        if success:
-            return message
-        else:
-            print(f"patoolib解压失败: {message}")
 
         return "No zip files could be extracted with any method."
 
