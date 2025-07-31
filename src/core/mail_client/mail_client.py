@@ -14,7 +14,7 @@ from lxml import html
 from urllib.parse import unquote
 
 from log_core.logging_config import get_logger
-from config_env import get_email_config
+from src.utils.config_env import get_email_config
 
 # 模块导出
 __all__ = [
@@ -86,8 +86,8 @@ class ContentTypes:
 
 class Directories:
     """目录常量"""
-    ATTACHMENT = "attachment"
-    BILL_CSV_RAW = "bill_csv_raw"
+    ATTACHMENT = "data/raw/attachments"
+    BILL_CSV_RAW = "data/raw/bills"
 
 
 class MailClient:

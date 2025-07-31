@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  wechatpay-to-notion:
+    build: .
+    container_name: wechatpay-to-notion
+    environment:
+      # 邮箱配置
+      - EMAIL_USERNAME=${EMAIL_USERNAME}
+      - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+      - EMAIL_IMAP_URL=${EMAIL_IMAP_URL}
+      
+      # Notion配置
+      - NOTION_DATABASE_ID=${NOTION_DATABASE_ID}
+      - NOTION_TOKEN=${NOTION_TOKEN}
+    
+    volumes:
+      # 挂载数据目录以持久化文件
+      - ./attachment:/app/attachment
+      - ./bill_csv_raw:/app/bill_csv_raw
+      
+    # 如果需要定时运行，可以添加cron作业或使用restart策略
+    restart: unless-stopped
+    
+    # 如果这是一次性任务，可以使用以下配置
+    # restart: "no"

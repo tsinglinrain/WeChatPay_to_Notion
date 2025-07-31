@@ -1,8 +1,8 @@
-import config_env
+from src.utils import config_env
 
-from notion_core.notion_client_cus import NotionClient
-from mail_core.data_processor import DataProcessor
-from mail_core.csv_transformer import CsvTransformer
+from src.core.notion_client_cus.notion_client_cus import NotionClient
+from src.core.file_handle.data_processor import DataProcessor
+from src.core.file_handle.csv_transformer import CsvTransformer
 
 
 def config_loader():

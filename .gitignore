@@ -171,3 +171,5 @@ attachment/
 bill_csv_raw/
 *test*
 .vscode/
+draft/
+data/

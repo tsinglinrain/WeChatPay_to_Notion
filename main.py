@@ -2,10 +2,10 @@ import project_init
 
 import main_mail as main_mail
 import main_notion as main_notion
-from notion_core.notion_client_cus import NotionClient
-from mail_core.mail_client import MailClient, PaymentPlatform
-import config_duplicate
-from log_core.logging_config import get_logger
+from src.core.notion_client_cus.notion_client_cus import NotionClient
+from src.core.mail_client.mail_client import MailClient, PaymentPlatform
+from src.utils import config_duplicate
+from src.core.log_core.logging_config import get_logger
 
 # 获取当前模块的日志器
 logger = get_logger(__name__)
