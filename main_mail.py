@@ -1,13 +1,12 @@
 import config_env
-import logging
 from typing import Tuple, Optional
 from mail_core.mail_client import MailClient, PaymentPlatform
 from mail_core.unzip_att import FileExtractor
 from mail_core.move_file import FileMover
+from log_core.logging_config import get_logger
 
-# 配置日志
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+# 获取当前模块的日志器
+logger = get_logger(__name__)
 
 
 def launch_signal(client: MailClient) -> None:

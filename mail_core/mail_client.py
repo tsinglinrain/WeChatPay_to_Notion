@@ -1,8 +1,8 @@
 import os
+import sys
 import imaplib
 import email
 import re
-import logging
 from pathlib import Path
 from typing import Optional, List, Tuple, Dict
 from email.header import decode_header
@@ -12,8 +12,8 @@ from email.message import Message
 import requests
 from lxml import html
 from urllib.parse import unquote
-from dotenv import load_dotenv
 
+from log_core.logging_config import get_logger
 from config_env import get_email_config
 
 # 模块导出
@@ -26,9 +26,8 @@ __all__ = [
     'Directories'
 ]
 
-# 配置日志
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+# 获取当前模块的日志器
+logger = get_logger(__name__)
 
 # 常量定义
 class PaymentPlatform:
@@ -89,35 +88,6 @@ class Directories:
     """目录常量"""
     ATTACHMENT = "attachment"
     BILL_CSV_RAW = "bill_csv_raw"
-
-
-def load_email_config() -> Tuple[str, str, str]:
-    """
-    从环境变量加载邮箱配置
-    
-    Returns:
-        Tuple[str, str, str]: (用户名, 密码, IMAP服务器地址)
-        
-    Raises:
-        ValueError: 当必要的环境变量缺失时
-    """
-    load_dotenv()
-    
-    username = os.getenv("EMAIL_USERNAME")
-    password = os.getenv("EMAIL_PASSWORD")
-    imap_url = os.getenv("EMAIL_IMAP_URL")
-    
-    if not all([username, password, imap_url]):
-        missing_vars = [
-            var for var, value in [
-                ("EMAIL_USERNAME", username),
-                ("EMAIL_PASSWORD", password),
-                ("EMAIL_IMAP_URL", imap_url)
-            ] if not value
-        ]
-        raise ValueError(f"Missing required environment variables: {', '.join(missing_vars)}")
-    
-    return username, password, imap_url
 
 
 class MailClient:
@@ -550,7 +520,7 @@ class MailClient:
                            f"Supported platforms: {PaymentPlatform.get_all_platforms()}")
         
         try:
-            username, password, imap_url = load_email_config()
+            username, password, imap_url = get_email_config()
             
             with MailClient(username, password, imap_url, payment_platform) as client:
                 client.connect()
