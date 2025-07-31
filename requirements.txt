@@ -4,5 +4,4 @@ pandas
 lxml
 notion-client
 zipfile
-patool
 pyzipper

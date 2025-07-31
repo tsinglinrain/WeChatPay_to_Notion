@@ -22,15 +22,12 @@ class DataProcessor:
         self.df["交易时间"] = self.df["交易时间"].map(
             lambda x: "".join([x[:10], "T", x[11:], "Z"])
         )  # ISO 8601
+        self.df = self.df.fillna("")
+
         if self.platform == "alipay":
             self.df["金额"] = self.df["金额"].map(lambda x: float(x))
-            # self.df["备注"] = self.df["备注"].fillna("")
-            # self.df["商家订单号"] = self.df["商家订单号"].fillna("")
-            self.df = self.df.fillna("")
         elif self.platform == "wechatpay":
-            self.df = self.df.fillna("")
             self.df["金额(元)"] = self.df["金额(元)"].map(lambda x: float(x[1:]))
-            # self.df["金额(元)"] = self.df["金额(元)"].map(lambda x: float(x[1:]) if isinstance(x, str) else x)
             self.df["备注"] = self.df["备注"].map(lambda x: "" if x == "/" else x)
 
     def filter_rows(self, column, values_to_exclude):
@@ -44,7 +41,6 @@ class DataProcessor:
         pass
 
     def get_processed_data(self):
-        pass
         return self.df
 
 

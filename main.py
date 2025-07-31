@@ -29,7 +29,7 @@ def bill_to_notion(payment_platform):
     path_att = "./attachment"
     path_target = "./bill_csv_raw"
     msg = main_mail.unzip_attachment(
-        path_att, path_target, client.paswd, payment_platform
+        path_att, path_target, client.passwd, payment_platform
     )
     print(msg)
 

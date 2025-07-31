@@ -3,13 +3,13 @@ from notion_client import Client
 
 
 class NotionClient:
-    def __init__(self, database_id, token, payment_platform):
+    def __init__(self, database_id: str, token: str, payment_platform: str):
         self.database_id = database_id
         self.token = token
         self.client: Client = Client(auth=token)
         self.payment_platform = payment_platform
 
-    def create_page(self, properties):
+    def create_page(self, properties: dict) -> None:
         """Create a new page in the database"""
 
         try:
@@ -32,12 +32,12 @@ class NotionClient:
 
     def notion_property(
         self,
-        content,
-        price,
-        category,
-        date,
-        counterparty,
-        remarks,
+        content: str,
+        price: float,
+        category: str,
+        date: str,
+        counterparty: str,
+        remarks: str,
         transaction_number="",
         merchant_tracking_number="",
         payment_method="undefined",
