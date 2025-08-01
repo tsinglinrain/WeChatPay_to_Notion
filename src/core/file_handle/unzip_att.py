@@ -1,17 +1,10 @@
-"""
-文件解压模块
-
-该模块提供了文件解压功能，专门用于处理微信支付和支付宝的账单压缩包。
-支持密码保护的ZIP文件解压。
-"""
-
 import os
 from datetime import datetime
 from pathlib import Path
 from typing import List, Optional, Tuple
 import zipfile
 import pyzipper
-from log_core.logging_config import get_logger
+from src.core.log_core.logging_config import get_logger
 
 # 获取当前模块的日志器
 logger = get_logger(__name__)
@@ -240,17 +233,6 @@ class FileExtractor:
             error_message = f"Error during file extraction: {e}"
             logger.error(error_message)
             return error_message
-            print(f"zipfile解压失败: {message}")
-
-        # 如果标准zipfile失败，尝试pyzipper
-        success, message = self.extract_with_pyzipper(zip_path, earliest_file)
-        if success:
-            return message
-        else:
-            logger.error(f"pyzipper extraction also failed: {message}")
-
-        return "No zip files could be extracted with any method."
-
 
 def main() -> None:
     """主函数，用于测试文件解压功能"""

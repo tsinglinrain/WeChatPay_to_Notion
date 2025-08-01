@@ -10,7 +10,7 @@ import shutil
 from pathlib import Path
 from typing import Optional, Dict
 import pandas as pd
-from log_core.logging_config import get_logger
+from src.core.log_core.logging_config import get_logger
 
 # 获取当前模块的日志器
 logger = get_logger(__name__)

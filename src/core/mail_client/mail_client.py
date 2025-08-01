@@ -13,7 +13,7 @@ import requests
 from lxml import html
 from urllib.parse import unquote
 
-from log_core.logging_config import get_logger
+from src.core.log_core.logging_config import get_logger
 from src.utils.config_env import get_email_config
 
 # 模块导出
@@ -88,6 +88,7 @@ class Directories:
     """目录常量"""
     ATTACHMENT = "data/raw/attachments"
     BILL_CSV_RAW = "data/raw/bills"
+    BILL_CSV_PROCESSED = "data/processed"
 
 
 class MailClient:

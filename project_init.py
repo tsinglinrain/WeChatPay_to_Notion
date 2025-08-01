@@ -6,7 +6,7 @@
 """
 
 import os
-from log_core.logging_config import setup_project_logging
+from src.core.log_core.logging_config import setup_project_logging
 
 
 def initialize_project():
@@ -25,7 +25,7 @@ def initialize_project():
     )
     
     # 获取logger并记录初始化信息
-    from log_core.logging_config import get_logger
+    from src.core.log_core.logging_config import get_logger
     logger = get_logger(__name__)
     
     logger.info("=" * 50)

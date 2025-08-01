@@ -1,6 +1,6 @@
 from src.utils import config_env
 from typing import Tuple, Optional
-from src.core.mail_client.mail_client import MailClient, PaymentPlatform
+from src.core.mail_client.mail_client import MailClient, PaymentPlatform, Directories
 from src.core.file_handle.unzip_att import FileExtractor
 from src.core.file_handle.move_file import FileMover
 from src.core.log_core.logging_config import get_logger
@@ -134,8 +134,8 @@ def main() -> None:
         username, password, imap_url, database_id, token = config_loader()
 
         # 连接邮箱,获取附件
-        payment_platform = PaymentPlatform.ALIPAY  # 使用常量而不是字符串
-        # payment_platform = PaymentPlatform.WECHATPAY  # 微信支付选项
+        # payment_platform = PaymentPlatform.ALIPAY  # 使用常量而不是字符串
+        payment_platform = PaymentPlatform.WECHATPAY  # 微信支付选项
         
         logger.info(f"Starting email processing for platform: {payment_platform}")
         
@@ -145,14 +145,14 @@ def main() -> None:
             get_attachment(client)
 
             # 解压附件
-            path_att = "./attachment"
-            path_target = "./bill_csv_raw"
+            path_att = Directories.ATTACHMENT
+            path_target = Directories.BILL_CSV_RAW
             msg = unzip_attachment(path_att, path_target, client.passwd, payment_platform)
             logger.info(f"Unzip result: {msg}")
 
             # 移动文件
-            csv_csv_path = "bill_csv_raw"
-            target_path = "./"
+            csv_csv_path = Directories.BILL_CSV_RAW
+            target_path = Directories.BILL_CSV_PROCESSED
             move_file(csv_csv_path, target_path, payment_platform)
             logger.info("File processing completed successfully")
             
