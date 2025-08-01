@@ -1,10 +1,11 @@
 import main_mail as main_mail
 import main_notion as main_notion
-from notion_core.notion_client_cus import NotionClient
-from mail_core.mail_client import MailClient
+from src.core.notion_client_cus.notion_client_cus import NotionClient
+from src.core.mail_client.mail_client import MailClient
 import config_duplicate
 
 
+# 暂时没有更改本文档,代码逻辑仍然为旧版,不符合
 def bill_to_notion(payment_platform):
 
     if payment_platform not in ["alipay", "wechatpay"]:  # 防呆

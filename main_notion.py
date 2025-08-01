@@ -1,8 +1,8 @@
 from src.utils import config_env
 
 from src.core.notion_client_cus.notion_client_cus import NotionClient
-from src.core.file_handle.data_processor import DataProcessor
-from src.core.file_handle.csv_transformer import CsvTransformer
+from src.core.file_handler.data_processor import DataProcessor
+from src.core.file_handler.csv_transformer import CsvTransformer
 
 
 def config_loader():
