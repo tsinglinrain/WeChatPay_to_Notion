@@ -6,7 +6,6 @@ import re
 
 class CsvTransformer:
     def __init__(self, payment_platform):
-
         self.path_raw = f"{payment_platform}_raw.csv"
         self.path_std = f"{payment_platform}_standard.csv"
         encoding_dict = {"alipay": "gbk", "wechatpay": "utf-8"}

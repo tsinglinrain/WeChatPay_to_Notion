@@ -159,8 +159,7 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-config_private.yaml
-config_private*.yaml
+# Custom
 .env
 .env.local
 .env.*.local

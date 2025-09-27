@@ -11,7 +11,8 @@ import re
 import requests
 from urllib.parse import quote
 from urllib.parse import unquote
-import yaml
+
+import config_env
 
 
 class MailClient:
@@ -193,7 +194,6 @@ class MailClient:
         }
 
         if self.from_addr == payment_platform_dict[self.payment_platform]:
-
             print("Subject, From fetch_mail_attachment:", self.subject)
             self.walk_message(self.email_message)
             flag = True
@@ -202,26 +202,12 @@ class MailClient:
 
 # 使用
 def main():
-    # 加载 .yaml 文件,文件在上一级目录
-    config_path = os.path.join(
-        os.path.dirname(os.path.dirname(__file__)), "config_private.yaml"
-    )
-    with open(config_path, "r", encoding="utf-8") as file:
-        config = yaml.safe_load(file)
-
-    # 获取配置变量
-    email_config = config.get("email_config", {})
-    username, password, imap_url = (
-        i for i in email_config.values()
-    )  # 写成这样更简洁,但需要注意顺序
-    # username = email_config.get('username')
-    # password = email_config.get('password')
-    # imap_url = email_config.get('imap_url')
+    username, password, imap_url, _, _ = config_env.config_loader()
 
     # client = MailClient(username, password, imap_url, payment_platform="alipay") # payment_platform="wechatpay"
     client = MailClient(
         username, password, imap_url, payment_platform="wechatpay"
-    )  # payment_platform="wechatpay"
+    )  # payment_platform="wechatpay", "alipay"
 
     client.connect()
     client.fetch_mail()

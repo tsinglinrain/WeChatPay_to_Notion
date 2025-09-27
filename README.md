@@ -83,6 +83,16 @@
 
 - 下载本项目
 
+  注意本项目没有release， 需要自行下载。
+  
+  ```python
+  git clone https://github.com/tsinglinrain/WeChatPay_to_Notion.git
+  ```
+
+  或者
+
+  下载本项目代码
+
 - 安装所需库
 
   ```python

@@ -6,7 +6,6 @@ import config_duplicate
 
 
 def bill_to_notion(payment_platform):
-
     if payment_platform not in ["alipay", "wechatpay"]:  # 防呆
         raise ValueError(
             "Invalid payment platform, payment platform must be 'alipay' or 'wechatpay'"
