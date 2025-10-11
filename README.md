@@ -81,9 +81,14 @@
     <img src="./image/Notion_Integration/Notion_Integration_step8.png" alt="Notion_Integration_step8" style="width:80%; height:auto;"/>
   </details>
 
+- 配置环境
+  - python版本 >= 3.8(粗略的, 未测试过更低版本)
+  - IDE, 如VSCode, PyCharm等
+  - Docker(可选, 如果使用Docker部署, 暂时没上线)
+
 - 下载本项目
 
-  注意本项目没有release， 需要自行下载。
+  注意本项目没有release， 需要自行下载所有代码。
   
   ```python
   git clone https://github.com/tsinglinrain/WeChatPay_to_Notion.git
@@ -91,10 +96,11 @@
 
   或者
 
-  下载本项目代码
+  下载本项目代码，右上角点击绿色的"code"按钮，选择"Download ZIP"下载压缩包，然后解压。
 
 - 安装所需库
 
+  进入文件夹，注意如果是压缩包一定是解压过的。
   ```python
   pip install -r requirements.txt
   ```
@@ -108,11 +114,11 @@
   cp .env.template .env
   
   # 2. 编辑 .env 文件，填入您的配置信息
-  # EMAIL_USERNAME=your_email@example.com
-  # EMAIL_PASSWORD=your_email_password
-  # EMAIL_IMAP_URL=imap.example.com
-  # NOTION_DATABASE_ID=your_notion_database_id
-  # NOTION_TOKEN=your_notion_token
+  EMAIL_USERNAME=your_email@example.com
+  EMAIL_PASSWORD=your_email_password
+  EMAIL_IMAP_URL=imap.example.com
+  NOTION_DATABASE_ID=your_notion_database_id
+  NOTION_TOKEN=your_notion_token
   ```
 
 
@@ -125,7 +131,7 @@
 
   </details>
 
-- 账单发送到邮箱后，会有消息告知密码。请复制此密码，**自己邮箱发送密码给自己**，**格式必须如下**：
+- 账单发送到邮箱后，会有消息告知密码。请复制此密码，**自己邮箱发送密码给自己**，**格式必须如下**：（110110只是示例，图片中的也只是示例，输入自己的解压密码）
   ```text
   wechatpay解压密码110110
   alipay解压密码110110
@@ -166,6 +172,9 @@
   ```bash
   python main.py
   ```
+
+  然后根据提示选择，输入`0`表示导入微信支付账单，输入`1`表示导入支付宝账单。输入2代表全部。暂时不支持异步，后续会支持的。
+
 
 ### Docker运行(暂时没有上线)
 
