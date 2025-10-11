@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 import imaplib
 import email
 from email.header import decode_header
@@ -101,8 +101,7 @@ class MailClient:
 
     @staticmethod
     def walk_message(part: Message, count=0):
-        if not os.path.exists("attachment"):
-            os.makedirs("attachment")
+        Path("attachment").mkdir(parents=True, exist_ok=True)   # attachment后面应该改成配置文件指定的路径
 
         print(f"Content Type {count}:, {part.get_content_type()}")
         filename = part.get_filename()
@@ -120,7 +119,7 @@ class MailClient:
 
             # 下载附件
             payload = part.get_payload(decode=True)
-            with open(os.path.join("attachment", filename), "wb") as f:
+            with open(Path("attachment") / filename, "wb") as f:
                 f.write(payload)
 
         # 如果payload是HTML类型,尝试从中提取网址,微信就是
@@ -173,9 +172,7 @@ class MailClient:
                         filename = url.split("/")[-1][:10]  # 实际上用不到,暂时保留
 
                     with open(
-                        os.path.join(
-                            "attachment", re.sub(r'[\\/*?:"<>|]', "", filename)
-                        ),
+                        Path("attachment") / re.sub(r'[\\/*?:"<>|]', "", filename),
                         "wb",
                     ) as f:
                         f.write(response.content)

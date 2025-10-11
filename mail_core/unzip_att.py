@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 from datetime import datetime
 import zipfile
 import pyzipper
@@ -19,17 +19,16 @@ class FileExtractor:
 
     def search_files(self):
         text_start = {"alipay": "支付宝交易明细", "wechatpay": "微信支付账单"}
-        files = [
-            f
-            for f in os.listdir(self.attachment_path)
-            if os.path.isfile(os.path.join(self.attachment_path, f))
-        ]
+        base_path = Path(self.attachment_path)
+        base_path.mkdir(parents=True, exist_ok=True)
+
         zip_files = [
             f
-            for f in files
-            if f.endswith(".zip") and f.startswith(text_start[self.payment_platform])
+            for f in base_path.iterdir()
+            if f.is_file() and (f.suffix == ".zip") and f.name.startswith(text_start[self.payment_platform])
         ]
-        return zip_files
+        latest_file = max(zip_files, key=lambda f: f.stat().st_mtime)
+        return latest_file
 
     @staticmethod
     def extract_date_from_filename(filename):
@@ -104,24 +103,18 @@ class FileExtractor:
         if not files:
             return "No zip files found in directory."
 
-        # 按修改时间排序文件（最新的在前）
-        sorted_files = sorted(
-            files,
-            key=lambda f: os.path.getmtime(os.path.join(self.attachment_path, f)),
-            reverse=True,
-        )
-        earliest_file = sorted_files[0]
-        zip_path = os.path.join(self.attachment_path, earliest_file)
-
+        latest_file = self.search_files()
+        zip_path = latest_file
+        print(f"Attempting to extract: {zip_path}")
         # 尝试用标准zipfile解压
-        success, message = self.extract_with_zipfile(zip_path, earliest_file)
+        success, message = self.extract_with_zipfile(zip_path, latest_file)
         if success:
             return message
         else:
             print(f"zipfile解压失败: {message}")
 
         # 如果标准zipfile失败，尝试pyzipper
-        success, message = self.extract_with_pyzipper(zip_path, earliest_file)
+        success, message = self.extract_with_pyzipper(zip_path, latest_file)
         if success:
             return message
         else:

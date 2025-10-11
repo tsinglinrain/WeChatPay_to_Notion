@@ -1,7 +1,6 @@
-import os
 import shutil
 import pandas as pd
-
+from pathlib import Path
 
 class FileMover:
     def __init__(self, source_dir, target_dir, payment_platform):
@@ -10,56 +9,50 @@ class FileMover:
         self.payment_platform = payment_platform
 
     def find_latest_file(self):
-        latest_file = ""
-        latest_time = 0
         name = {"alipay": "支付宝交易明细", "wechatpay": "微信支付账单"}
-        for foldername, subfolders, filenames in os.walk(self.source_dir):
-            for filename in filenames:
-                if filename.startswith(name[self.payment_platform]):
-                    file_path = os.path.join(foldername, filename)
-                    file_time = os.path.getmtime(file_path)
-                    if file_time > latest_time:
-                        latest_time = file_time
-                        latest_file = file_path
-        return latest_file
+        base_dir = Path(self.source_dir)
+        files = [
+            f for f in base_dir.glob("*")
+            if f.is_file() and f.name.startswith(name[self.payment_platform])
+        ]
+        if not files:
+            return ""
+        latest_file = max(files, key=lambda f: f.stat().st_mtime)
+        return str(latest_file)
 
     def copy_file(self):
         name = {"alipay": "alipay_raw", "wechatpay": "wechatpay_raw"}
-        source_file = self.find_latest_file()
-        if source_file:
-            if self.payment_platform == "wechatpay":
-                # 微信账单需要转换为csv
-                self.excel_to_csv()
-            else:
-                shutil.copy2(source_file, self.target_dir)
-                extension = os.path.splitext(source_file)[1]  # 获取源文件的扩展名
-                # 创建新的文件路径
-                new_file_path = os.path.join(
-                    self.target_dir, name[self.payment_platform] + extension
-                )
-                # 如果目标文件已存在，先删除它
-                if os.path.exists(new_file_path):
-                    os.remove(new_file_path)
-                # 重命名文件
-                os.rename(
-                    os.path.join(self.target_dir, os.path.basename(source_file)),
-                    new_file_path,
-                )
-        else:
+        source_file = Path(self.find_latest_file())
+        
+        if not source_file.exists():
             print("No file found to copy.")
+            return
+        
+        # 处理微信支付的特殊情况
+        if self.payment_platform == "wechatpay":
+            self.excel_to_csv()
+            return
+
+        target_dir = Path(self.target_dir)
+        target_dir.mkdir(parents=True, exist_ok=True)  # 确保目标目录存在
+
+        new_file_path = target_dir / f"{name[self.payment_platform]}{source_file.suffix}"
+
+        # 复制并覆盖旧文件
+        shutil.copy2(source_file, new_file_path)
+        print(f"Copied and renamed to: {new_file_path}")
 
     def excel_to_csv(self):
         """专门处理微信账单的excel转csv"""
         if self.payment_platform != "wechatpay":
             print("This method is only for WeChat Pay bills.")
             return
+        
         name = {"alipay": "alipay_raw", "wechatpay": "wechatpay_raw"}
         source_file = self.find_latest_file()
         if source_file:
             df = pd.read_excel(source_file)
-            csv_path = os.path.join(
-                self.target_dir, name[self.payment_platform] + ".csv"
-            )
+            csv_path = Path(self.target_dir) / (name[self.payment_platform] + ".csv")
             df.to_csv(csv_path, index=False)
             print(f"Converted {source_file} to {csv_path}")
         else:
@@ -70,8 +63,7 @@ def main():
     csv_csv_path = "bill_csv_raw"
     target_path = "./"
     name = {"alipay": "alipay_raw", "wechatpay": "wechatpay_raw"}
-    mover = FileMover(csv_csv_path, target_path, "wechatpay")
-    mover.excel_to_csv()
+    mover = FileMover(csv_csv_path, target_path, "alipay")
     mover.copy_file()
 
 
