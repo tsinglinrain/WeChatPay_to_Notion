@@ -84,7 +84,7 @@
 - 配置环境
   - python版本 >= 3.8(粗略的, 未测试过更低版本)
   - IDE, 如VSCode, PyCharm等
-  - Docker(可选, 如果使用Docker部署, 暂时没上线)
+  - Docker(可选, 如果使用Docker部署, **暂时没上线**)
 
 - 下载本项目
 
@@ -105,33 +105,43 @@
   pip install -r requirements.txt
   ```
 
-- **新版本配置方式（推荐）**: 使用环境变量配置
+- **环境变量配置**: 使用环境变量配置
 
   本项目现在支持环境变量配置，更适合Docker部署：
-
-  ```bash
-  # 1. 复制环境变量模板文件
-  cp .env.template .env
   
-  # 2. 编辑 .env 文件，填入您的配置信息
-  EMAIL_USERNAME=your_email@example.com
-  EMAIL_PASSWORD=your_email_password
-  EMAIL_IMAP_URL=imap.example.com
-  NOTION_DATABASE_ID=your_notion_database_id
-  NOTION_TOKEN=your_notion_token
-  ```
+  1. 复制环境变量模板文件
+  
+      windows下复制粘贴`.env.template`，把文件名改成`.env`
+      
+      或者Linux下
+      ```bash
+      cp .env.template .env
+      ```
+
+  2. 编辑 `.env` 文件，填入您的配置信息
+      ```bash
+      
+      EMAIL_USERNAME=your_email@example.com
+      EMAIL_PASSWORD=your_email_password
+      EMAIL_IMAP_URL=imap.example.com
+      NOTION_DATABASE_ID=your_notion_database_id
+      NOTION_TOKEN=your_notion_token
+      ```
 
 
-  <details>
-    <summary>database_id details</summary>
+  3. `data_source_id` 获取
+
+      请注意，Notion在2025年9月3日发布了新版本的Notion API, 新增data source的理念。简单来说, 现在database数据库的概念是能够包含多个数据源data source的容器, data source不能单独存在，必须依赖database这个容器来展现。
+      所以我们现在需要对数据源data source进行内容的填充。
+      具体获取方式请先参看官方[链接](https://developers.notion.com/docs/working-with-databases#adding-pages-to-a-data-source)。
     
-      https://www.notion.so/tsinglin/68111a1sssssss487a884cafcd5333310c?v=3d0c405e7cae405599aed2fe0f5233cc
+      <details>
+      <summary>示意图如下</summary>
+      <img src="./image/data_source_get/data_source_get1.png" alt="Notion_Integration_step8" style="width:100%; height:auto;"/>
 
-      database_id: 68111a1sssssss487a884cafcd5333310c
+      <img src="./image/data_source_get/data_source_get2.png" alt="Notion_Integration_step8" style="width:100%; height:auto;"/>
 
-  </details>
-
-- 账单发送到邮箱后，会有消息告知密码。请复制此密码，**自己邮箱发送密码给自己**，**格式必须如下**：（110110只是示例，图片中的也只是示例，输入自己的解压密码）
+- 账单发送到邮箱后，会有消息告知密码。请复制此密码，**自己邮箱发送密码给自己**，**格式必须如下**：（110110只是示例，图片中的也只是示例，输入自己的**微信支付**那个服务号发过来的和支付宝**服务消息**发过来解压密码）
   ```text
   wechatpay解压密码110110
   alipay解压密码110110
