@@ -1,16 +1,15 @@
-import requests
 from notion_client import Client
 
 
 class NotionClient:
-    def __init__(self, database_id, token, payment_platform):
-        self.database_id = database_id
+    def __init__(self, data_source_id, token, payment_platform):
+        self.data_source_id = data_source_id
         self.token = token
         self.client: Client = Client(auth=token)
         self.payment_platform = payment_platform
 
     def create_page(self, properties):
-        """Create a new page in the database"""
+        """Create a new page in the data_source"""
 
         try:
             self.client.pages.create(
@@ -20,7 +19,7 @@ class NotionClient:
                 #     }
                 # },    # 我个人没有这个需求,如果有,可以加上
                 # cover # 也没有需求
-                parent={"database_id": self.database_id},
+                parent={"data_source_id": self.data_source_id},
                 properties=properties,
                 # children=blocks,  # 不要children
             )

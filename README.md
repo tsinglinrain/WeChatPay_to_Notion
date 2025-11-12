@@ -210,7 +210,7 @@
     -e EMAIL_USERNAME="your_email@example.com" \
     -e EMAIL_PASSWORD="your_email_password" \
     -e EMAIL_IMAP_URL="imap.example.com" \
-    -e NOTION_DATABASE_ID="your_notion_database_id" \
+    -e NOTION_DATA_SOURCE_ID="your_notion_data_source_id" \
     -e NOTION_TOKEN="your_notion_token" \
     -v $(pwd)/attachment:/app/attachment \
     -v $(pwd)/bill_csv_raw:/app/bill_csv_raw \

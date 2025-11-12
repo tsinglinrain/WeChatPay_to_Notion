@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
-def get_email_config() -> Tuple[str, str, str]:
+def get_email_config() -> Tuple[str | None, str | None, str | None]:
     """
     获取邮箱配置
     返回: (username, password, imap_url)
@@ -34,33 +34,33 @@ def get_email_config() -> Tuple[str, str, str]:
     return username, password, imap_url
 
 
-def get_notion_config() -> Tuple[str, str]:
+def get_notion_config() -> Tuple[str | None, str | None]:
     """
     获取Notion配置
-    返回: (database_id, token)
+    返回: (data_source_id, token)
     """
-    database_id = os.getenv("NOTION_DATABASE_ID")
+    data_source_id = os.getenv("NOTION_DATA_SOURCE_ID")
     token = os.getenv("NOTION_TOKEN")
 
-    if not all([database_id, token]):
+    if not all([data_source_id, token]):
         missing = []
-        if not database_id:
-            missing.append("NOTION_DATABASE_ID")
+        if not data_source_id:
+            missing.append("NOTION_DATA_SOURCE_ID")
         if not token:
             missing.append("NOTION_TOKEN")
         raise ValueError(
             f"Missing required environment variables: {', '.join(missing)}"
         )
 
-    return database_id, token
+    return data_source_id, token
 
 
 def config_loader() -> Tuple[str, str, str, str, str]:
     """
     加载所有配置
-    返回: (username, password, imap_url, database_id, token)
+    返回: (username, password, imap_url, data_source_id, token)
     """
     username, password, imap_url = get_email_config()
-    database_id, token = get_notion_config()
+    data_source_id, token = get_notion_config()
 
-    return username, password, imap_url, database_id, token
+    return username, password, imap_url, data_source_id, token
