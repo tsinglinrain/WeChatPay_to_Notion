@@ -14,13 +14,13 @@ def bill_to_notion(payment_platform):
     config_duplicate.check_and_copy_config()
 
     # 加载配置文件
-    username, password, imap_url, database_id, token = main_mail.config_loader()
+    username, password, imap_url, data_source_id, token = main_mail.config_loader()
 
     # 因为下载后的附件名称不确定，所以舍去解压及复制文件的步骤，直接将附件下载到当前目录下
     # 如果不需要邮箱功能，请将账单重命名为`wechatpay_raw.csv`或`alipay_raw.csv`放在当前目录下
 
     # 初始化 NotionClient
-    notionclient = NotionClient(database_id, token, payment_platform)
+    notionclient = NotionClient(data_source_id, token, payment_platform)
     main_notion.process_apply(notionclient, payment_platform)
 
 

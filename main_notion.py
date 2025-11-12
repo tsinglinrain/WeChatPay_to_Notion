@@ -8,7 +8,7 @@ from mail_core.csv_transformer import CsvTransformer
 def config_loader():
     """
     从环境变量加载配置
-    返回: (username, password, imap_url, database_id, token)
+    返回: (username, password, imap_url, data_source_id, token)
     """
     return config_env.config_loader()
 
@@ -50,7 +50,7 @@ def process_apply(notionclient: NotionClient, payment_platform):
 
 def main():
     # 加载配置文件
-    username, password, imap_url, database_id, token = config_loader()
+    username, password, imap_url, data_source_id, token = config_loader()
 
     payment_platform = "alipay"
     # payment_platform = "wechatpay"
@@ -60,7 +60,7 @@ def main():
         )
 
     # 初始化 NotionClient
-    notionclient = NotionClient(database_id, token, payment_platform)
+    notionclient = NotionClient(data_source_id, token, payment_platform)
     process_apply(notionclient, payment_platform)
 
 

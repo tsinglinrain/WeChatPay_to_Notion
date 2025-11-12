@@ -2,7 +2,7 @@ requests
 python-dotenv
 pandas
 lxml
-notion-client==2.5.0
+notion-client>=2.6.0
 patool
 pyzipper
 openpyxl

@@ -117,17 +117,17 @@
   EMAIL_USERNAME=your_email@example.com
   EMAIL_PASSWORD=your_email_password
   EMAIL_IMAP_URL=imap.example.com
-  NOTION_DATABASE_ID=your_notion_database_id
+  NOTION_DATA_SOURCE_ID=your_notion_data_source_id
   NOTION_TOKEN=your_notion_token
   ```
 
 
   <details>
-    <summary>database_id details</summary>
+    <summary>data_source_id details</summary>
     
       https://www.notion.so/tsinglin/68111a1sssssss487a884cafcd5333310c?v=3d0c405e7cae405599aed2fe0f5233cc
 
-      database_id: 68111a1sssssss487a884cafcd5333310c
+      data_source_id: 68111a1sssssss487a884cafcd5333310c
 
   </details>
 
@@ -200,7 +200,7 @@
     -e EMAIL_USERNAME="your_email@example.com" \
     -e EMAIL_PASSWORD="your_email_password" \
     -e EMAIL_IMAP_URL="imap.example.com" \
-    -e NOTION_DATABASE_ID="your_notion_database_id" \
+    -e NOTION_DATA_SOURCE_ID="your_notion_data_source_id" \
     -e NOTION_TOKEN="your_notion_token" \
     -v $(pwd)/attachment:/app/attachment \
     -v $(pwd)/bill_csv_raw:/app/bill_csv_raw \

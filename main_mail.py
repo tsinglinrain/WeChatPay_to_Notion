@@ -17,7 +17,7 @@ def launch_signal(client):
 def config_loader():
     """
     从环境变量加载配置
-    返回: (username, password, imap_url, database_id, token)
+    返回: (username, password, imap_url, data_source_id, token)
     """
     return config_env.config_loader()
 
@@ -56,7 +56,7 @@ def move_file(csv_csv_path, target_path, payment_platform):
 
 def main():
     # 加载配置文件
-    username, password, imap_url, database_id, token = config_loader()
+    username, password, imap_url, data_source_id, token = config_loader()
 
     # 连接邮箱,获取附件
     # payment_platform="wechatpay"
