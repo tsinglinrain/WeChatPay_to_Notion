@@ -38,7 +38,7 @@ For more details, click:
   <img src="../image/alipay_bill.png" alt ="aliapy_bill" style="width:100%; height:auto;"/>
 </div>
 
-- Copy the sample database. It is recommended to `duplicate` this [Bill Import to Notion Template](https://tsinglin.notion.site/68951a1caaba487a884cafcd5086810c?v=3d0c405e7cae405599aed2fe0f5233cc). After getting familiar with it, you can modify it as needed.
+- Copy the sample data_source. It is recommended to `duplicate` this [Bill Import to Notion Template](https://tsinglin.notion.site/68951a1caaba487a884cafcd5086810c?v=3d0c405e7cae405599aed2fe0f5233cc). After getting familiar with it, you can modify it as needed.
 
 - Customize the Notion Integration
   <details>
@@ -67,14 +67,14 @@ For more details, click:
     username: "imap.163.com"
 
   notion_config:
-    database_id: "c1a348********************4c7"  # Database ID
+    data_source_id: "c1a348********************4c7"  # Database ID
     token: "secret_OHvKVP*******************Lq" # Token
   ```
   <details>
-    <summary> Details about database_id </summary>
+    <summary> Details about data_source_id </summary>
     <img src="../image/alipay_password.jpg" alt="Notion_Integration_step8" style="width:40%; height:auto;"/>
     
     https://www.notion.so/tsinglin/68111a1sssssss487a884cafcd5333310c?v=3d0c405e7cae405599aed2fe0f5233cc
 
-    database_id: 68111a1sssssss487a884cafcd5333310c
+    data_source_id: 68111a1sssssss487a884cafcd5333310c
   </details>

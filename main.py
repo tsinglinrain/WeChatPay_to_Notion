@@ -14,7 +14,7 @@ def bill_to_notion(payment_platform):
     config_duplicate.check_and_copy_config()
 
     # 加载配置文件
-    username, password, imap_url, database_id, token = main_mail.config_loader()
+    username, password, imap_url, data_source_id, token = main_mail.config_loader()
 
     # 连接邮箱,获取附件
     client = MailClient(
@@ -38,7 +38,7 @@ def bill_to_notion(payment_platform):
     main_mail.move_file(csv_csv_path, target_path, payment_platform)
 
     # 初始化 NotionClient
-    notionclient = NotionClient(database_id, token, payment_platform)
+    notionclient = NotionClient(data_source_id, token, payment_platform)
     main_notion.process_apply(notionclient, payment_platform)
 
 
