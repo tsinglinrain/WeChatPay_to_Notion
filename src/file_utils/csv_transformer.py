@@ -32,14 +32,3 @@ class CsvTransformer:
         )
 
 
-def main():
-    # 全部统一,alipay,wechatpay
-    csvp_alipay = CsvTransformer("alipay")
-    csvp_alipay.transform_to_standard_csv()
-
-    # csv_wechat = CsvTransformer("wechatpay")
-    # csv_wechat.transform_to_standard_csv()
-
-
-if __name__ == "__main__":
-    main()

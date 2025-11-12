@@ -123,19 +123,3 @@ class FileExtractor:
         return "No zip files could be extracted with any method."
 
 
-def main():
-    path_att = "./attachment"
-    path_target = "./bill_csv_raw"
-
-    payment_platform = "wechatpay"
-    # password = "473396"  # alipay
-    password = "047409"  # wechatpay
-    extractor = FileExtractor(path_att, path_target, password, payment_platform)
-    files = extractor.search_files()
-    print(files)
-    msg = extractor.unzip_earliest_file(files)
-    print(msg)
-
-
-if __name__ == "__main__":
-    main()

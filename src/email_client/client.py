@@ -12,11 +12,11 @@ import requests
 from urllib.parse import quote
 from urllib.parse import unquote
 
-import config_env
+from src.config.settings import load_config
 
 
 class MailClient:
-    def __init__(self, username, password, imap_url, payment_platform=None):
+    def __init__(self, username, password, imap_url, payment_platform=None, attachment_dir="attachment"):
         self.username = username
         self.password = password
         self.imap_url = imap_url
@@ -27,6 +27,8 @@ class MailClient:
         self.paswd = None
         self.subject = None
         self.payment_platform = payment_platform
+        # directory to save attachments
+        self.attachment_dir = attachment_dir
 
     def connect(self):
         # 连接到服务器
@@ -99,9 +101,9 @@ class MailClient:
                     flag = True
         return flag
 
-    @staticmethod
-    def walk_message(part: Message, count=0):
-        Path("attachment").mkdir(parents=True, exist_ok=True)   # attachment后面应该改成配置文件指定的路径
+    def walk_message(self, part: Message, count=0):
+        # use configured attachment dir
+        Path(self.attachment_dir).mkdir(parents=True, exist_ok=True)
 
         print(f"Content Type {count}:, {part.get_content_type()}")
         filename = part.get_filename()
@@ -119,7 +121,7 @@ class MailClient:
 
             # 下载附件
             payload = part.get_payload(decode=True)
-            with open(Path("attachment") / filename, "wb") as f:
+            with open(Path(self.attachment_dir) / filename, "wb") as f:
                 f.write(payload)
 
         # 如果payload是HTML类型,尝试从中提取网址,微信就是
@@ -147,7 +149,6 @@ class MailClient:
                     response = requests.get(url)
                     print(f"status_code:{response.status_code}")
                     print(f"response.headers:{response.headers}")
-
                     # 检查状态码
                     if response.status_code != 200:
                         raise Exception(
@@ -197,33 +198,3 @@ class MailClient:
             return flag
 
 
-# 使用
-def main():
-    username, password, imap_url, _, _ = config_env.config_loader()
-
-    # client = MailClient(username, password, imap_url, payment_platform="alipay") # payment_platform="wechatpay"
-    client = MailClient(
-        username, password, imap_url, payment_platform="wechatpay"
-    )  # payment_platform="wechatpay", "alipay"
-
-    client.connect()
-    client.fetch_mail()
-    for num in reversed(client.email_list):
-        client.get_mail_info(num)
-        if client.get_passwd():
-            print("Get password successfully")
-            break
-    if not client.paswd:
-        print("Can't get password, maybe you forget to send the password email.")
-        print("Only when you send a password, you will download the attachment.")
-    else:
-        print("-" * 20)
-        for num in reversed(client.email_list):
-            client.get_mail_info(num)
-            if client.fetch_mail_attachment():
-                print("Download attachment successfully")
-                break
-
-
-if __name__ == "__main__":
-    main()

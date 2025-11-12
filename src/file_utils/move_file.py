@@ -59,13 +59,3 @@ class FileMover:
             print("No file found to convert.")
 
 
-def main():
-    csv_csv_path = "bill_csv_raw"
-    target_path = "./"
-    name = {"alipay": "alipay_raw", "wechatpay": "wechatpay_raw"}
-    mover = FileMover(csv_csv_path, target_path, "alipay")
-    mover.copy_file()
-
-
-if __name__ == "__main__":
-    main()

@@ -1,70 +1,84 @@
-import main_mail as main_mail
-import main_notion as main_notion
-from notion_core.notion_client_cus import NotionClient
-from mail_core.mail_client import MailClient
-import config_duplicate
-
+from src.config.settings import load_config
+from src.config import constants
+from src.email_client.client import MailClient
+from src.file_utils.unzip_att import FileExtractor
+from src.file_utils.move_file import FileMover
+from src.file_utils.csv_transformer import CsvTransformer
+from src.data_processing.data_processor import DataProcessor
+from src.notion_client.client import NotionClient
 
 def bill_to_notion(payment_platform):
-    if payment_platform not in ["alipay", "wechatpay"]:  # 防呆
-        raise ValueError(
-            "Invalid payment platform, payment platform must be 'alipay' or 'wechatpay'"
-        )
+    """Fetches, processes, and sends billing data to Notion."""
+    if payment_platform not in ["alipay", "wechatpay"]:
+        raise ValueError("Payment platform must be 'alipay' or 'wechatpay'.")
 
-    config_duplicate.check_and_copy_config()
+    # Load configuration
+    username, password, imap_url, data_source_id, token = load_config()
 
-    # 加载配置文件
-    username, password, imap_url, data_source_id, token = main_mail.config_loader()
+    # ensure default directories exist
+    constants.ensure_dirs()
 
-    # 连接邮箱,获取附件
-    client = MailClient(
-        username, password, imap_url, payment_platform
-    )  # payment_platform="wechatpay"
-    client.connect()
-    client.fetch_mail()
-    main_mail.get_attachment(client)
-
-    # unzip_attachment
-    path_att = "./attachment"
-    path_target = "./bill_csv_raw"
-    msg = main_mail.unzip_attachment(
-        path_att, path_target, client.paswd, payment_platform
+    # Fetch and download email attachments
+    email_client = MailClient(
+        username,
+        password,
+        imap_url,
+        payment_platform,
+        attachment_dir=str(constants.ATTACHMENT_DIR),
     )
-    print(msg)
+    email_client.connect()
+    email_client.fetch_mail()
+    
+    for num in reversed(email_client.email_list):
+        email_client.get_mail_info(num)
+        if email_client.get_passwd():
+            break
+    
+    if not email_client.paswd:
+        raise Exception("Failed to retrieve the password from email.")
 
-    # move_file
-    csv_csv_path = "bill_csv_raw"
-    target_path = "./"
-    main_mail.move_file(csv_csv_path, target_path, payment_platform)
+    for num in reversed(email_client.email_list):
+        email_client.get_mail_info(num)
+        if email_client.fetch_mail_attachment():
+            break
 
-    # 初始化 NotionClient
-    notionclient = NotionClient(data_source_id, token, payment_platform)
-    main_notion.process_apply(notionclient, payment_platform)
+    # Unzip and move the bill file
+    extractor = FileExtractor(str(constants.ATTACHMENT_DIR), str(constants.BILL_RAW_DIR), email_client.paswd, payment_platform)
+    files = extractor.search_files()
+    extractor.unzip_earliest_file(files)
+    
+    mover = FileMover(str(constants.BILL_RAW_DIR), str(constants.PROJECT_ROOT), payment_platform)
+    mover.copy_file()
 
+    # Process and upload to Notion
+    transformer = CsvTransformer(payment_platform)
+    transformer.transform_to_standard_csv()
+    
+    processor = DataProcessor(transformer.path_std, payment_platform)
+    processor.process_mandatory_fields()
+    
+    notion_client = NotionClient(data_source_id, token, payment_platform)
+    df_processed = processor.get_processed_data()
+    df_processed.apply(notion_client.process_row, axis=1)
 
 def main():
-    flag = input(
-        "Which platform's billing data do you want to import, or all of them? \n(0(wechatpay), 1(alipay), 2(all)): "
-    )
-    flag = int(flag)
+    """Main entry point for the application."""
     try:
-        if flag == 0:
-            payment_platform = ("wechatpay",)
-        elif flag == 1:
-            payment_platform = ("alipay",)
-        elif flag == 2:
-            payment_platform = ("alipay", "wechatpay")
-        else:
-            raise ValueError("Invalid input, please enter 0, 1 or 2.")
-    except:
-        raise ValueError("Invalid input, please enter 0, 1 or 2.")
-
-    for payment_platform in payment_platform:
-        print(f"Processing {payment_platform}...")
-        bill_to_notion(payment_platform)
-        print(f"{payment_platform} processed successfully!")
-        print("========================================")
-
+        flag = int(input("Select platform (0: wechatpay, 1: alipay, 2: all): "))
+        platforms = {0: ("wechatpay",), 1: ("alipay",), 2: ("alipay", "wechatpay")}
+        
+        if flag not in platforms:
+            raise ValueError("Invalid input. Please enter 0, 1, or 2.")
+            
+        for platform in platforms[flag]:
+            print(f"Processing {platform}...")
+            bill_to_notion(platform)
+            print(f"{platform} processed successfully!")
+            
+    except ValueError as e:
+        print(f"Error: {e}")
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
 
 if __name__ == "__main__":
     main()

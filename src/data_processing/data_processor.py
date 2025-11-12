@@ -48,23 +48,3 @@ class DataProcessor:
         return self.df
 
 
-if __name__ == "__main__":
-    path_raw_alipay = "alipay_standard.csv"
-    processor_alipay = DataProcessor(path_raw_alipay, "alipay")
-    processor_alipay.process_mandatory_fields()
-    processor_alipay.filter_rows("收/支", ["收入", "不计收支"])
-    processor_alipay.drop_columns(["对方账号", "交易状态", "收/支"])
-    processor_alipay.drop_columns(["交易订单号", "商家订单号"])
-    df_processed_alipay = processor_alipay.get_processed_data()
-    print(df_processed_alipay.head(5))
-    print(type(df_processed_alipay.iloc[0]["备注"]))
-
-    # path_raw_wechat = "wechatpay_standard.csv"
-    # processor_wechat = DataProcessor(path_raw_wechat, "wechatpay")
-    # processor_wechat.process_mandatory_fields()
-    # processor_wechat.filter_rows("收/支", ["收入"])
-    # processor_wechat.drop_columns(["当前状态", "收/支"])
-    # processor_wechat.drop_columns(["交易单号", "商户单号"])
-    # df_processed_wechat = processor_wechat.get_processed_data()
-    # print(df_processed_wechat.head(5))
-    # print(type(df_processed_wechat.iloc[0]["金额(元)"]))
