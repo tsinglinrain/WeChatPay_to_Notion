@@ -10,28 +10,33 @@
 # 这是我示例的一个数据处理过程
 
 import pandas as pd
+from src.adapters.base import PaymentAdapter
 
 
 class DataProcessor:
-    def __init__(self, path, platform):
+    def __init__(self, path, adapter: PaymentAdapter):
         self.path = path
-        self.platform = platform
+        self.adapter = adapter
         self.df = pd.read_csv(self.path, encoding="utf-8")
 
     def process_mandatory_fields(self):
         self.df["交易时间"] = self.df["交易时间"].map(
             lambda x: "".join([x[:10], "T", x[11:], "Z"])
         )  # ISO 8601
-        if self.platform == "alipay":
-            self.df["金额"] = self.df["金额"].map(lambda x: float(x))
-            # self.df["备注"] = self.df["备注"].fillna("")
-            # self.df["商家订单号"] = self.df["商家订单号"].fillna("")
-            self.df = self.df.fillna("")
-        elif self.platform == "wechatpay":
-            self.df = self.df.fillna("")
-            self.df["金额(元)"] = self.df["金额(元)"].map(lambda x: float(x[1:]))
-            # self.df["金额(元)"] = self.df["金额(元)"].map(lambda x: float(x[1:]) if isinstance(x, str) else x)
-            self.df["备注"] = self.df["备注"].map(lambda x: "" if x == "/" else x)
+        
+        # Use adapter to get column mapping
+        col_map = self.adapter.get_csv_column_mapping()
+        amount_col = col_map['amount']
+        remarks_col = col_map['remarks']
+        
+        # Process amount using adapter
+        self.df[amount_col] = self.df[amount_col].map(self.adapter.process_amount)
+        
+        # Fill NaN values
+        self.df = self.df.fillna("")
+        
+        # Process remarks using adapter
+        self.df[remarks_col] = self.df[remarks_col].map(self.adapter.process_remarks)
 
     def filter_rows(self, column, values_to_exclude):
         for value in values_to_exclude:

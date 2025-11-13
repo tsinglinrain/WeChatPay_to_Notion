@@ -1,5 +1,6 @@
 from src.config.settings import load_config
 from src.config import constants
+from src.adapters.factory import AdapterFactory
 from src.email_client.client import MailClient
 from src.file_utils.unzip_att import FileExtractor
 from src.file_utils.move_file import FileMover
@@ -9,8 +10,8 @@ from src.notion_client.client import NotionClient
 
 def bill_to_notion(payment_platform):
     """Fetches, processes, and sends billing data to Notion."""
-    if payment_platform not in ["alipay", "wechatpay"]:
-        raise ValueError("Payment platform must be 'alipay' or 'wechatpay'.")
+    # Create adapter for the platform
+    adapter = AdapterFactory.create(payment_platform)
 
     # Load configuration
     username, password, imap_url, data_source_id, token = load_config()
@@ -23,7 +24,7 @@ def bill_to_notion(payment_platform):
         username,
         password,
         imap_url,
-        payment_platform,
+        adapter,
         attachment_dir=str(constants.ATTACHMENT_DIR),
     )
     email_client.connect()
@@ -47,17 +48,17 @@ def bill_to_notion(payment_platform):
     files = extractor.search_files()
     extractor.unzip_earliest_file(files)
     
-    mover = FileMover(str(constants.BILL_RAW_DIR), str(constants.PROJECT_ROOT), payment_platform)
+    mover = FileMover(str(constants.BILL_RAW_DIR), str(constants.PROJECT_ROOT), adapter)
     mover.copy_file()
 
     # Process and upload to Notion
-    transformer = CsvTransformer(payment_platform)
+    transformer = CsvTransformer(adapter)
     transformer.transform_to_standard_csv()
     
-    processor = DataProcessor(transformer.path_std, payment_platform)
+    processor = DataProcessor(transformer.path_std, adapter)
     processor.process_mandatory_fields()
     
-    notion_client = NotionClient(data_source_id, token, payment_platform)
+    notion_client = NotionClient(data_source_id, token, adapter)
     df_processed = processor.get_processed_data()
     df_processed.apply(notion_client.process_row, axis=1)
 

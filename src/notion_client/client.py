@@ -1,12 +1,13 @@
 from notion_client import Client
+from src.adapters.base import PaymentAdapter
 
 
 class NotionClient:
-    def __init__(self, data_source_id, token, payment_platform):
+    def __init__(self, data_source_id, token, adapter: PaymentAdapter):
         self.data_source_id = data_source_id
         self.token = token
         self.client: Client = Client(auth=token)
-        self.payment_platform = payment_platform
+        self.adapter = adapter
 
     def create_page(self, properties):
         """Create a new page in the data_source"""
@@ -58,7 +59,6 @@ class NotionClient:
         Returns:
             properties: 返回notion的json格式
         """
-        payment_platform_dict = {"alipay": "Alipay", "wechatpay": "WeChatPay"}
         properties = {
             "Name": {"title": [{"text": {"content": content}}]},
             "Price": {"number": price},
@@ -69,7 +69,7 @@ class NotionClient:
                     "time_zone": time_zone,  # 时区, 参见官方文档
                 }
             },
-            "From": {"select": {"name": payment_platform_dict[self.payment_platform]}},
+            "From": {"select": {"name": self.adapter.get_notion_display_name()}},
             "Counterparty": {"rich_text": [{"text": {"content": counterparty}}]},
             "Remarks": {"rich_text": [{"text": {"content": remarks}}]},
             "Transaction Number": {
@@ -83,30 +83,18 @@ class NotionClient:
         return properties
 
     def process_row(self, row):
-        if self.payment_platform == "alipay":
-            properties = self.notion_property(
-                row["商品说明"],
-                row["金额"],
-                row["交易分类"],
-                row["交易时间"],
-                row["交易对方"],
-                row["备注"],
-                row["交易订单号"],
-                row["商家订单号"],
-                row["收/付款方式"],
-            )
-        elif self.payment_platform == "wechatpay":
-            properties = self.notion_property(
-                row["商品"],
-                row["金额(元)"],
-                row["交易类型"],
-                row["交易时间"],
-                row["交易对方"],
-                row["备注"],
-                row["交易单号"],
-                row["商户单号"],
-                row["支付方式"],
-            )
-        else:
-            raise ValueError("Invalid payment platform")
+        # Use adapter to get column mapping
+        col_map = self.adapter.get_csv_column_mapping()
+        
+        properties = self.notion_property(
+            row[col_map['content']],
+            row[col_map['amount']],
+            row[col_map['category']],
+            row[col_map['datetime']],
+            row[col_map['counterparty']],
+            row[col_map['remarks']],
+            row[col_map['transaction_id']],
+            row[col_map['merchant_order_id']],
+            row[col_map['payment_method']],
+        )
         self.create_page(properties)

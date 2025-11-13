@@ -13,10 +13,11 @@ from urllib.parse import quote
 from urllib.parse import unquote
 
 from src.config.settings import load_config
+from src.adapters.base import PaymentAdapter
 
 
 class MailClient:
-    def __init__(self, username, password, imap_url, payment_platform=None, attachment_dir="attachment"):
+    def __init__(self, username, password, imap_url, adapter: PaymentAdapter, attachment_dir="attachment"):
         self.username = username
         self.password = password
         self.imap_url = imap_url
@@ -26,7 +27,7 @@ class MailClient:
         self.from_addr = None
         self.paswd = None
         self.subject = None
-        self.payment_platform = payment_platform
+        self.adapter = adapter
         # directory to save attachments
         self.attachment_dir = attachment_dir
 
@@ -87,18 +88,12 @@ class MailClient:
         print("From:", self.from_addr)
         if self.from_addr == self.username:
             print("Subject,from get_passwd:", self.subject)
-            if self.payment_platform == "alipay":
-                if re.match("^alipay解压密码[0-9]{6}$", self.subject):
-                    print("Subject:", self.subject)
-                    self.paswd = self.subject[-6:]
-                    print("Password:", self.paswd)
-                    flag = True
-            elif self.payment_platform == "wechatpay":
-                if re.match("^wechatpay解压密码[0-9]{6}$", self.subject):
-                    print("Subject:", self.subject)
-                    self.paswd = self.subject[-6:]
-                    print("Password:", self.paswd)
-                    flag = True
+            pattern = f"^{self.adapter.platform_name}解压密码[0-9]{{6}}$"
+            if re.match(pattern, self.subject):
+                print("Subject:", self.subject)
+                self.paswd = self.subject[-6:]
+                print("Password:", self.paswd)
+                flag = True
         return flag
 
     def walk_message(self, part: Message, count=0):
@@ -185,13 +180,8 @@ class MailClient:
 
     def fetch_mail_attachment(self):
         flag = False
-        # 创建一个字典,由于表示支付平台来源
-        payment_platform_dict = {
-            "alipay": "service@mail.alipay.com",
-            "wechatpay": "wechatpay@tencent.com",
-        }
-
-        if self.from_addr == payment_platform_dict[self.payment_platform]:
+        
+        if self.from_addr == self.adapter.get_email_sender():
             print("Subject, From fetch_mail_attachment:", self.subject)
             self.walk_message(self.email_message)
             flag = True
