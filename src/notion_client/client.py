@@ -1,5 +1,6 @@
 from notion_client import Client
 from src.adapters.base import PaymentAdapter
+from src.utils.logger import get_logger
 
 
 class NotionClient:
@@ -8,6 +9,7 @@ class NotionClient:
         self.token = token
         self.client: Client = Client(auth=token)
         self.adapter = adapter
+        self.logger = get_logger()
 
     def create_page(self, properties):
         """Create a new page in the data_source"""
@@ -24,11 +26,10 @@ class NotionClient:
                 properties=properties,
                 # children=blocks,  # 不要children
             )
-            print("Page created successfully\n上传成功")
+            self.logger.info("Page created successfully | 上传成功")
         except Exception as e:
-            print(f"Failed to create page: {e}")
-            print("-" * 20)
-            print("上传失败,自动跳过,请自行检查")
+            self.logger.error(f"Failed to create page: {e}")
+            self.logger.warning("Upload failed, skipping | 上传失败,自动跳过,请自行检查")
 
     def notion_property(
         self,

@@ -4,6 +4,7 @@
 import re
 from src.config.constants import RAW_FILENAME_PREFIX, STD_FILENAME_TEMPLATE
 from src.adapters.base import PaymentAdapter
+from src.utils.logger import get_logger
 
 
 class CsvTransformer:
@@ -12,6 +13,7 @@ class CsvTransformer:
         self.path_raw = f"{RAW_FILENAME_PREFIX[adapter.platform_name]}.csv"
         self.path_std = STD_FILENAME_TEMPLATE.format(platform=adapter.platform_name)
         self.encoding = adapter.get_csv_encoding()
+        self.logger = get_logger()
 
     def transform_to_standard_csv(self):
         """读取原始文件，截取并得到新的文件"""
@@ -29,8 +31,8 @@ class CsvTransformer:
                             for line in lines[lines.index(line) :]
                         )
 
-        print(
-            f"The original csv file has been changed to a standard csv file: {self.path_std}"
+        self.logger.info(
+            f"Transformed CSV to standard format: {self.path_std}"
         )
 
 

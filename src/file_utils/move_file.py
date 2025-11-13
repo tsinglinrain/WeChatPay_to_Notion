@@ -3,12 +3,14 @@ import pandas as pd
 from pathlib import Path
 from src.config.constants import RAW_FILENAME_PREFIX
 from src.adapters.base import PaymentAdapter
+from src.utils.logger import get_logger
 
 class FileMover:
     def __init__(self, source_dir, target_dir, adapter: PaymentAdapter):
         self.source_dir = source_dir
         self.target_dir = target_dir
         self.adapter = adapter
+        self.logger = get_logger()
 
     def find_latest_file(self):
         base_dir = Path(self.source_dir)
@@ -25,7 +27,7 @@ class FileMover:
         source_file = Path(self.find_latest_file())
         
         if not source_file.exists():
-            print("No file found to copy.")
+            self.logger.warning("No file found to copy")
             return
         
         # 处理需要Excel转CSV的情况（如微信支付）
@@ -40,12 +42,12 @@ class FileMover:
 
         # 复制并覆盖旧文件
         shutil.copy2(source_file, new_file_path)
-        print(f"Copied and renamed to: {new_file_path}")
+        self.logger.info(f"Copied and renamed to: {new_file_path}")
 
     def excel_to_csv(self):
         """处理需要从Excel转换为CSV的账单（如微信支付）"""
         if not self.adapter.needs_excel_conversion():
-            print("This platform does not require Excel conversion.")
+            self.logger.warning("This platform does not require Excel conversion")
             return
         
         source_file = self.find_latest_file()
@@ -53,8 +55,8 @@ class FileMover:
             df = pd.read_excel(source_file)
             csv_path = Path(self.target_dir) / (RAW_FILENAME_PREFIX[self.adapter.platform_name] + ".csv")
             df.to_csv(csv_path, index=False)
-            print(f"Converted {source_file} to {csv_path}")
+            self.logger.info(f"Converted {source_file} to {csv_path}")
         else:
-            print("No file found to convert.")
+            self.logger.warning("No file found to convert")
 
 

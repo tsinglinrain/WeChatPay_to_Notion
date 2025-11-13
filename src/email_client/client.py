@@ -14,6 +14,7 @@ from urllib.parse import unquote
 
 from src.config.settings import load_config
 from src.adapters.base import PaymentAdapter
+from src.utils.logger import get_logger
 
 
 class MailClient:
@@ -30,6 +31,7 @@ class MailClient:
         self.adapter = adapter
         # directory to save attachments
         self.attachment_dir = attachment_dir
+        self.logger = get_logger()
 
     def connect(self):
         # 连接到服务器
@@ -46,7 +48,7 @@ class MailClient:
         self.mail.login(self.username, self.password)
 
         result_sel, data_sel = self.mail.select("inbox")
-        print(f"login status: {result_sel}, {data_sel}")
+        self.logger.info(f"Mail login status: {result_sel}, {data_sel}")
 
     def fetch_mail(self):
         # 搜索邮件
@@ -85,14 +87,14 @@ class MailClient:
     def get_passwd(self):
         # 检查邮件发件邮箱是否是自己的邮箱
         flag = False
-        print("From:", self.from_addr)
+        self.logger.debug(f"Email from: {self.from_addr}")
         if self.from_addr == self.username:
-            print("Subject,from get_passwd:", self.subject)
+            self.logger.debug(f"Subject from get_passwd: {self.subject}")
             pattern = f"^{self.adapter.platform_name}解压密码[0-9]{{6}}$"
             if re.match(pattern, self.subject):
-                print("Subject:", self.subject)
+                self.logger.info(f"Found password email with subject: {self.subject}")
                 self.paswd = self.subject[-6:]
-                print("Password:", self.paswd)
+                self.logger.info(f"Extracted password: {self.paswd}")
                 flag = True
         return flag
 
@@ -100,9 +102,9 @@ class MailClient:
         # use configured attachment dir
         Path(self.attachment_dir).mkdir(parents=True, exist_ok=True)
 
-        print(f"Content Type {count}:, {part.get_content_type()}")
+        self.logger.debug(f"Content Type {count}: {part.get_content_type()}")
         filename = part.get_filename()
-        print(f"Filename_ori:{filename}")
+        self.logger.debug(f"Original filename: {filename}")
         if filename:
             filename = "".join(
                 (
@@ -112,7 +114,7 @@ class MailClient:
                 )
                 for part, encoding in decode_header(filename)
             )
-            print("Filename_decoded:", filename)
+            self.logger.info(f"Decoded filename: {filename}")
 
             # 下载附件
             payload = part.get_payload(decode=True)
@@ -126,26 +128,27 @@ class MailClient:
             tree = html.fromstring(
                 part.get_payload(decode=True), parser=html.HTMLParser(encoding="utf-8")
             )
-            # print(html.tostring(tree, pretty_print=True).decode('utf-8'))  # 打印HTML树
-            print(f"tree:{tree}")
+            # self.logger.debug(html.tostring(tree, pretty_print=True).decode('utf-8'))  # 打印HTML树
+            self.logger.debug(f"Parsed HTML tree: {tree}")
             # link_elements = tree.xpath('/html/body/tr[4]/td/div/a')   # 我下载了其html,按照层级写的,不知道为什么是空值
             link_elements = tree.xpath('//a[contains(@href, "http")]')
 
-            print(f"link_elements:{link_elements}")
+            self.logger.debug(f"Found link elements: {link_elements}")
             for link in link_elements:
                 url = link.get("href")
                 if url and re.match(
                     "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+",
                     url,
                 ):
-                    print(f"url:{url}")  # 打印找到的网址
+                    self.logger.info(f"Found download URL: {url}")
 
                     # 下载网址指向的文件
                     response = requests.get(url)
-                    print(f"status_code:{response.status_code}")
-                    print(f"response.headers:{response.headers}")
+                    self.logger.info(f"Response status code: {response.status_code}")
+                    self.logger.debug(f"Response headers: {response.headers}")
                     # 检查状态码
                     if response.status_code != 200:
+                        self.logger.error(f"Request failed with status {response.status_code}")
                         raise Exception(
                             f"Request failed with status {response.status_code}"
                         )
@@ -153,6 +156,7 @@ class MailClient:
                     # 检查错误消息
                     error_message = "请在微信中重新申请导出"  # 当前文件已过期，请在微信中重新申请导出 or 当前文件下载次数已超出限制，如有需要请在微信中重新申请导出
                     if error_message in response.text:
+                        self.logger.error(f"Download link expired or limit exceeded")
                         raise Exception(
                             f"Request failed: 不要慌, {error_message}, 并且要重新发送密码邮件"
                         )
@@ -161,9 +165,9 @@ class MailClient:
                         filename = re.findall(
                             "filename=([^;]*)", response.headers["Content-Disposition"]
                         )[0]
-                        print(f"filename_html_ori:{filename}")
+                        self.logger.debug(f"Original HTML filename: {filename}")
                         filename = unquote(filename)  # 解码文件名
-                        print(f"filename_html_decoded:{filename}")
+                        self.logger.info(f"Decoded HTML filename: {filename}")
                     else:
                         filename = url.split("/")[-1][:10]  # 实际上用不到,暂时保留
 
@@ -182,7 +186,7 @@ class MailClient:
         flag = False
         
         if self.from_addr == self.adapter.get_email_sender():
-            print("Subject, From fetch_mail_attachment:", self.subject)
+            self.logger.info(f"Found bill email from {self.adapter.platform_name}: {self.subject}")
             self.walk_message(self.email_message)
             flag = True
             return flag
