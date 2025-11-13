@@ -168,7 +168,7 @@ class MailClient:
                         filename = url.split("/")[-1][:10]  # 实际上用不到,暂时保留
 
                     with open(
-                        Path("attachment") / re.sub(r'[\\/*?:"<>|]', "", filename),
+                        Path(self.attachment_dir) / re.sub(r'[\\/*?:"<>|]', "", filename),
                         "wb",
                     ) as f:
                         f.write(response.content)
@@ -176,7 +176,7 @@ class MailClient:
         if part.is_multipart():
             for subpart in part.get_payload():
                 count += 1
-                MailClient.walk_message(subpart, count)
+                self.walk_message(subpart, count)
 
     def fetch_mail_attachment(self):
         flag = False
