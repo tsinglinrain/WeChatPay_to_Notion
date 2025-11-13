@@ -30,13 +30,6 @@
 </div>
 </details>
 
-<details>
-  <summary>项目具体偏向代码的流程图</summary>
-    <div align="center">
-      <img src="./image/Bill_to_Notion_excalidraw.svg" alt="Bill_to_Notion_excalidraw" style="width:100%; height:auto;" />
-</div>
-</details>
-
 ## 其他说明
 
 > 寻找相关记账的模板，配合使用效果更佳哦。
@@ -60,7 +53,7 @@
   <img src="./image/alipay_bill.png" alt ="aliapy_bill" style="width:100%; height:auto;"/>
 </div>
 
-- 拷贝示例数据库，建议`duplicate`此[账单导入Notion模板](https://tsinglin.notion.site/68951a1caaba487a884cafcd5086810c?v=3d0c405e7cae405599aed2fe0f5233cc)，熟悉之后可自行修改
+- 拷贝示例数据库，建议`duplicate`此[账单导入Notion模板](https://tsinglin.notion.site/Notion-Dashboard-2aa99f72bada807082e7ee900eae92d6)，熟悉之后可自行修改
 
 - 内部集成认证流程设置
   
@@ -230,5 +223,6 @@ pass
 - 可以设置每月自动导出提醒
 
 ## Star History
+
 
 [![Star History Chart](https://api.star-history.com/svg?repos=tsinglinrain/WeChatPay_to_Notion&type=Date)](https://star-history.com/#tsinglinrain/WeChatPay_to_Notion&Date)
