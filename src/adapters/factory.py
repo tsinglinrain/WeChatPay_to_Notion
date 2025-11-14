@@ -3,7 +3,7 @@
 from typing import Dict, Type
 from src.adapters.base import PaymentAdapter
 from src.adapters.alipay_adapter import AlipayAdapter
-from src.adapters.wechat_adapter import WechatAdapter
+from src.adapters.wechatpay_adapter import WechatpayAdapter
 
 
 class AdapterFactory:
@@ -11,7 +11,7 @@ class AdapterFactory:
 
     _adapters: Dict[str, Type[PaymentAdapter]] = {
         "alipay": AlipayAdapter,
-        "wechatpay": WechatAdapter,
+        "wechatpay": WechatpayAdapter,
     }
 
     @classmethod

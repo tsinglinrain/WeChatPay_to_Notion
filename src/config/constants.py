@@ -1,8 +1,9 @@
 from pathlib import Path
 
 # Directory and filename constants
-ATTACHMENT_DIR = Path("attachment")
-BILL_RAW_DIR = Path("bill_csv_raw")
+data_path = Path("./data")
+ATTACHMENT_DIR = data_path / "attachment"
+BILL_RAW_DIR = data_path / "bill_csv_raw"
 PROJECT_ROOT = Path(".")
 
 # Filename prefixes / templates (can be overridden by envs later)

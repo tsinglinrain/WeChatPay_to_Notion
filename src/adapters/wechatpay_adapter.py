@@ -4,7 +4,7 @@ from typing import Dict
 from src.adapters.base import PaymentAdapter
 
 
-class WechatAdapter(PaymentAdapter):
+class WechatpayAdapter(PaymentAdapter):
     """Adapter for WeChat Pay payment platform."""
 
     def __init__(self):
