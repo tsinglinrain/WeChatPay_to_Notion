@@ -21,7 +21,11 @@ def main():
         service = BillImportService.from_env(logger)
         
         # Get user input for platform selection
-        flag = int(input("Select platform (0: wechatpay, 1: alipay, 2: all): "))
+        try:
+            flag = int(input("Select platform (0: wechatpay, 1: alipay, 2: all): "))
+        except ValueError:
+            logger.error("Invalid input: must be a number")
+            raise ValueError("Invalid input. Please enter a number (0, 1, or 2).")
         platforms = {0: ("wechatpay",), 1: ("alipay",), 2: ("alipay", "wechatpay")}
         
         if flag not in platforms:
