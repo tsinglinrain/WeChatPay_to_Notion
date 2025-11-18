@@ -2,7 +2,7 @@
 # 这里可以在 alipay_raw.csv 中直接删除某一些日期。当然你也可以用程序进行筛选
 
 import re
-from src.config.constants import RAW_FILENAME_PREFIX, STD_FILENAME_TEMPLATE
+from src.config.constants import RAW_FILENAME_PREFIX, STD_FILENAME_TEMPLATE, PROCESSED_DIR
 from src.adapters.base import PaymentAdapter
 from src.utils.logger import get_logger
 
@@ -11,7 +11,7 @@ class CsvTransformer:
     def __init__(self, adapter: PaymentAdapter):
         self.adapter = adapter
         self.path_raw = f"{RAW_FILENAME_PREFIX[adapter.platform_name]}.csv"
-        self.path_std = STD_FILENAME_TEMPLATE.format(platform=adapter.platform_name)
+        self.path_std = PROCESSED_DIR / STD_FILENAME_TEMPLATE.format(platform=adapter.platform_name)
         self.encoding = adapter.get_csv_encoding()
         self.logger = get_logger()
 
