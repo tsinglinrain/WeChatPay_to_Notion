@@ -1,7 +1,7 @@
 """Bill import service for orchestrating the complete import workflow."""
 
 from dataclasses import dataclass
-from typing import Optional
+from typing import Optional, Tuple
 from pathlib import Path
 
 from src.config.settings import load_config
@@ -78,7 +78,7 @@ class BillImportService:
             config = load_config()
             return cls(config, logger)
         except Exception as e:
-            raise ConfigurationError(f"Failed to load configuration: {e}")
+            raise ConfigurationError(f"Failed to load configuration: {e}") from e
     
     def import_bill(self, platform: str) -> ImportResult:
         """Execute the complete bill import workflow for a platform.
@@ -163,7 +163,7 @@ class BillImportService:
             email_client.connect()
             email_client.fetch_mail()
         except Exception as e:
-            raise ConfigurationError(f"Failed to connect to email server: {e}")
+            raise ConfigurationError(f"Failed to connect to email server: {e}") from e
         
         # Find password email
         self.logger.info("Searching for password email...")
@@ -226,7 +226,7 @@ class BillImportService:
             if "No zip files" in result:
                 raise ExtractionError(result)
         except Exception as e:
-            raise ExtractionError(f"Failed to extract bill file: {e}")
+            raise ExtractionError(f"Failed to extract bill file: {e}") from e
         
         self.logger.info("Moving and processing bill file...")
         
@@ -239,7 +239,7 @@ class BillImportService:
         try:
             mover.copy_file()
         except Exception as e:
-            raise ExtractionError(f"Failed to move bill file: {e}")
+            raise ExtractionError(f"Failed to move bill file: {e}") from e
         
         self.logger.info("Transforming CSV to standard format...")
         
@@ -251,7 +251,7 @@ class BillImportService:
         try:
             transformer.transform_to_standard_csv()
         except Exception as e:
-            raise DataProcessingError(f"Failed to transform CSV: {e}")
+            raise DataProcessingError(f"Failed to transform CSV: {e}") from e
         
         return transformer.path_std
     
@@ -275,7 +275,7 @@ class BillImportService:
             processor.process_mandatory_fields()
             return processor.get_processed_data()
         except Exception as e:
-            raise DataProcessingError(f"Failed to process data: {e}")
+            raise DataProcessingError(f"Failed to process data: {e}") from e
     
     def _upload_to_notion(self, data, adapter: PaymentAdapter) -> int:
         """Upload processed data to Notion.
@@ -297,4 +297,4 @@ class BillImportService:
             data.apply(notion_client.process_row, axis=1)
             return len(data)
         except Exception as e:
-            raise NotionUploadError(f"Failed to upload to Notion: {e}")
+            raise NotionUploadError(f"Failed to upload to Notion: {e}") from e
