@@ -136,7 +136,7 @@ class BillImportService:
         self.logger.info(f"Created adapter for {adapter.get_notion_display_name()}")
         return adapter
     
-    def _fetch_from_email(self, adapter: PaymentAdapter) -> tuple[str, bool]:
+    def _fetch_from_email(self, adapter: PaymentAdapter) -> Tuple[str, bool]:
         """Fetch password and bill attachment from email.
         
         Args:
