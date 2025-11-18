@@ -74,9 +74,14 @@ class BillImportService:
         Raises:
             ConfigurationError: If configuration is invalid or missing
         """
+        from src.core.exceptions import ConfigurationError
+        
         try:
-            config = load_config()
+            config = load_config(validate=True)
             return cls(config, logger)
+        except ConfigurationError:
+            # Re-raise ConfigurationError as-is with full validation details
+            raise
         except Exception as e:
             raise ConfigurationError(f"Failed to load configuration: {e}")
     
@@ -89,6 +94,17 @@ class BillImportService:
         Returns:
             ImportResult with operation status and details
         """
+        # Validate platform
+        from src.utils.validators import PlatformValidator
+        valid, error = PlatformValidator.validate_platform(platform)
+        if not valid:
+            self.logger.error(f"Platform validation failed: {error}")
+            return ImportResult(
+                success=False,
+                platform=platform,
+                error_message=error
+            )
+        
         self.logger.info(f"Starting bill import for platform: {platform}")
         
         try:
