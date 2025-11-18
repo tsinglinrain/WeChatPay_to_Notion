@@ -232,7 +232,7 @@ class BillImportService:
         
         mover = FileMover(
             str(constants.BILL_RAW_DIR),
-            str(constants.PROJECT_ROOT),
+            str(constants.PROCESSED_DIR),
             adapter
         )
         
@@ -243,7 +243,11 @@ class BillImportService:
         
         self.logger.info("Transforming CSV to standard format...")
         
-        transformer = CsvTransformer(adapter)
+        # Construct paths for raw and standard CSV files
+        raw_csv_path = constants.PROCESSED_DIR / f"{constants.RAW_FILENAME_PREFIX[adapter.platform_name]}.csv"
+        std_csv_path = constants.PROCESSED_DIR / constants.STD_FILENAME_TEMPLATE.format(platform=adapter.platform_name)
+        
+        transformer = CsvTransformer(adapter, raw_csv_path, std_csv_path)
         try:
             transformer.transform_to_standard_csv()
         except Exception as e:
