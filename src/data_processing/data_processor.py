@@ -46,10 +46,10 @@ class DataProcessor:
         self.df.drop(columns_to_drop, axis=1, inplace=True)
 
     def custom_drop(self, column, value):
+        """Custom drop logic - to be implemented based on specific requirements."""  
         pass
 
     def get_processed_data(self):
-        pass
         return self.df
 
 
