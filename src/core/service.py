@@ -253,7 +253,7 @@ class BillImportService:
         except Exception as e:
             raise DataProcessingError(f"Failed to transform CSV: {e}") from e
         
-        return raw_csv_path
+        return std_csv_path
     
     def _process_data(self, csv_file: str, adapter: PaymentAdapter):
         """Process and validate bill data.
