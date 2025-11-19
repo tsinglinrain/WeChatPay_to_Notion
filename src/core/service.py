@@ -197,7 +197,7 @@ class BillImportService:
         
         return email_client.paswd, attachment_found
     
-    def _process_bill_file(self, password: str, platform: str, adapter: PaymentAdapter) -> str:
+    def _process_bill_file(self, password: str, platform: str, adapter: PaymentAdapter) -> Path:
         """Extract and process the bill file.
         
         Args:
@@ -253,7 +253,7 @@ class BillImportService:
         except Exception as e:
             raise DataProcessingError(f"Failed to transform CSV: {e}") from e
         
-        return transformer.path_std
+        return raw_csv_path
     
     def _process_data(self, csv_file: str, adapter: PaymentAdapter):
         """Process and validate bill data.

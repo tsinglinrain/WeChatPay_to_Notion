@@ -1,7 +1,7 @@
 """Base adapter interface for payment platforms."""
 
 from abc import ABC, abstractmethod
-from typing import Dict, Any
+from typing import Dict
 
 
 class PaymentAdapter(ABC):
