@@ -2,6 +2,7 @@ from pathlib import Path
 from datetime import datetime
 import zipfile
 import pyzipper
+from src.utils.logger import get_logger
 
 
 class FileExtractor:
@@ -16,6 +17,7 @@ class FileExtractor:
         self.target_folder_path = path_target_folder
         self.attachment_password = attachment_password
         self.payment_platform = payment_platform
+        self.logger = get_logger()
 
     def search_files(self):
         text_start = {"alipay": "支付宝交易明细", "wechatpay": "微信支付账单"}
@@ -101,41 +103,29 @@ class FileExtractor:
 
     def unzip_earliest_file(self, files):
         if not files:
+            self.logger.warning("No zip files found in directory")
             return "No zip files found in directory."
 
         latest_file = self.search_files()
         zip_path = latest_file
-        print(f"Attempting to extract: {zip_path}")
+        self.logger.info(f"Attempting to extract: {zip_path}")
         # 尝试用标准zipfile解压
         success, message = self.extract_with_zipfile(zip_path, latest_file)
         if success:
+            self.logger.info(message)
             return message
         else:
-            print(f"zipfile解压失败: {message}")
+            self.logger.warning(f"zipfile extraction failed: {message}")
 
         # 如果标准zipfile失败，尝试pyzipper
         success, message = self.extract_with_pyzipper(zip_path, latest_file)
         if success:
+            self.logger.info(message)
             return message
         else:
-            print(f"pyzipper解压失败: {message}")
+            self.logger.error(f"pyzipper extraction failed: {message}")
 
+        self.logger.error("No zip files could be extracted with any method")
         return "No zip files could be extracted with any method."
 
 
-def main():
-    path_att = "./attachment"
-    path_target = "./bill_csv_raw"
-
-    payment_platform = "wechatpay"
-    # password = "473396"  # alipay
-    password = "047409"  # wechatpay
-    extractor = FileExtractor(path_att, path_target, password, payment_platform)
-    files = extractor.search_files()
-    print(files)
-    msg = extractor.unzip_earliest_file(files)
-    print(msg)
-
-
-if __name__ == "__main__":
-    main()

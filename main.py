@@ -1,70 +1,75 @@
-import main_mail as main_mail
-import main_notion as main_notion
-from notion_core.notion_client_cus import NotionClient
-from mail_core.mail_client import MailClient
-import config_duplicate
-
-
-def bill_to_notion(payment_platform):
-    if payment_platform not in ["alipay", "wechatpay"]:  # 防呆
-        raise ValueError(
-            "Invalid payment platform, payment platform must be 'alipay' or 'wechatpay'"
-        )
-
-    config_duplicate.check_and_copy_config()
-
-    # 加载配置文件
-    username, password, imap_url, data_source_id, token = main_mail.config_loader()
-
-    # 连接邮箱,获取附件
-    client = MailClient(
-        username, password, imap_url, payment_platform
-    )  # payment_platform="wechatpay"
-    client.connect()
-    client.fetch_mail()
-    main_mail.get_attachment(client)
-
-    # unzip_attachment
-    path_att = "./attachment"
-    path_target = "./bill_csv_raw"
-    msg = main_mail.unzip_attachment(
-        path_att, path_target, client.paswd, payment_platform
-    )
-    print(msg)
-
-    # move_file
-    csv_csv_path = "bill_csv_raw"
-    target_path = "./"
-    main_mail.move_file(csv_csv_path, target_path, payment_platform)
-
-    # 初始化 NotionClient
-    notionclient = NotionClient(data_source_id, token, payment_platform)
-    main_notion.process_apply(notionclient, payment_platform)
-
+from src.core import BillImportService
+from src.utils.logger import setup_logger
+import logging
 
 def main():
-    flag = input(
-        "Which platform's billing data do you want to import, or all of them? \n(0(wechatpay), 1(alipay), 2(all)): "
+    """Main entry point for the application."""
+    # Setup logger with both console and file output
+    logger = setup_logger(
+        name="bill2notion",
+        level=logging.INFO,
+        log_file="logs/bill2notion.log",
+        console=True
     )
-    flag = int(flag)
+    
+    logger.info("=" * 60)
+    logger.info("Bill2Notion Application Started")
+    logger.info("=" * 60)
+    
     try:
-        if flag == 0:
-            payment_platform = ("wechatpay",)
-        elif flag == 1:
-            payment_platform = ("alipay",)
-        elif flag == 2:
-            payment_platform = ("alipay", "wechatpay")
-        else:
-            raise ValueError("Invalid input, please enter 0, 1 or 2.")
-    except:
-        raise ValueError("Invalid input, please enter 0, 1 or 2.")
-
-    for payment_platform in payment_platform:
-        print(f"Processing {payment_platform}...")
-        bill_to_notion(payment_platform)
-        print(f"{payment_platform} processed successfully!")
-        print("========================================")
-
+        # Create service instance from environment configuration
+        service = BillImportService.from_env(logger)
+        
+        # Get user input for platform selection
+        try:
+            flag = int(input("Select platform (0: wechatpay, 1: alipay, 2: all): "))
+        except ValueError:
+            logger.error("Invalid input: must be a number")
+            raise ValueError("Invalid input. Please enter a number (0, 1, or 2).")
+        platforms = {0: ("wechatpay",), 1: ("alipay",), 2: ("alipay", "wechatpay")}
+        
+        if flag not in platforms:
+            logger.error("Invalid input received")
+            raise ValueError("Invalid input. Please enter 0, 1, or 2.")
+        
+        results = []
+        
+        # Process each selected platform
+        for platform in platforms[flag]:
+            logger.info(f"\n{'='*60}")
+            logger.info(f"Processing {platform}...")
+            logger.info(f"{'='*60}")
+            
+            result = service.import_bill(platform)
+            results.append(result)
+            
+            # Print result to console
+            print(f"\n{result}")
+        
+        # Summary
+        logger.info("\n" + "=" * 60)
+        logger.info("SUMMARY")
+        logger.info("=" * 60)
+        
+        success_count = sum(1 for r in results if r.success)
+        total_records = sum(r.records_processed for r in results if r.success)
+        
+        for result in results:
+            logger.info(str(result))
+        
+        logger.info(f"\nTotal: {success_count}/{len(results)} platforms succeeded")
+        logger.info(f"Total records imported: {total_records}")
+            
+    except ValueError as e:
+        logger.error(f"Validation error: {e}")
+        print(f"\nError: {e}")
+    except Exception as e:
+        logger.exception(f"An unexpected error occurred: {e}")
+        print(f"\nAn unexpected error occurred: {e}")
+    finally:
+        logger.info("=" * 60)
+        logger.info("Bill2Notion Application Finished")
+        logger.info("=" * 60)
 
 if __name__ == "__main__":
     main()

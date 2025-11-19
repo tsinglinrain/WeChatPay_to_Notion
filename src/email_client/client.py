@@ -12,11 +12,13 @@ import requests
 from urllib.parse import quote
 from urllib.parse import unquote
 
-import config_env
+from src.config.settings import load_config
+from src.adapters.base import PaymentAdapter
+from src.utils.logger import get_logger
 
 
 class MailClient:
-    def __init__(self, username, password, imap_url, payment_platform=None):
+    def __init__(self, username, password, imap_url, adapter: PaymentAdapter, attachment_dir="attachment"):
         self.username = username
         self.password = password
         self.imap_url = imap_url
@@ -26,7 +28,10 @@ class MailClient:
         self.from_addr = None
         self.paswd = None
         self.subject = None
-        self.payment_platform = payment_platform
+        self.adapter = adapter
+        # directory to save attachments
+        self.attachment_dir = attachment_dir
+        self.logger = get_logger()
 
     def connect(self):
         # 连接到服务器
@@ -43,7 +48,7 @@ class MailClient:
         self.mail.login(self.username, self.password)
 
         result_sel, data_sel = self.mail.select("inbox")
-        print(f"login status: {result_sel}, {data_sel}")
+        self.logger.info(f"Mail login status: {result_sel}, {data_sel}")
 
     def fetch_mail(self):
         # 搜索邮件
@@ -82,30 +87,24 @@ class MailClient:
     def get_passwd(self):
         # 检查邮件发件邮箱是否是自己的邮箱
         flag = False
-        print("From:", self.from_addr)
+        self.logger.debug(f"Email from: {self.from_addr}")
         if self.from_addr == self.username:
-            print("Subject,from get_passwd:", self.subject)
-            if self.payment_platform == "alipay":
-                if re.match("^alipay解压密码[0-9]{6}$", self.subject):
-                    print("Subject:", self.subject)
-                    self.paswd = self.subject[-6:]
-                    print("Password:", self.paswd)
-                    flag = True
-            elif self.payment_platform == "wechatpay":
-                if re.match("^wechatpay解压密码[0-9]{6}$", self.subject):
-                    print("Subject:", self.subject)
-                    self.paswd = self.subject[-6:]
-                    print("Password:", self.paswd)
-                    flag = True
+            self.logger.debug(f"Subject from get_passwd: {self.subject}")
+            pattern = f"^{self.adapter.platform_name}解压密码[0-9]{{6}}$"
+            if re.match(pattern, self.subject):
+                self.logger.info(f"Found password email with subject: {self.subject}")
+                self.paswd = self.subject[-6:]
+                self.logger.info(f"Extracted password: {self.paswd}")
+                flag = True
         return flag
 
-    @staticmethod
-    def walk_message(part: Message, count=0):
-        Path("attachment").mkdir(parents=True, exist_ok=True)   # attachment后面应该改成配置文件指定的路径
+    def walk_message(self, part: Message, count=0):
+        # use configured attachment dir
+        Path(self.attachment_dir).mkdir(parents=True, exist_ok=True)
 
-        print(f"Content Type {count}:, {part.get_content_type()}")
+        self.logger.debug(f"Content Type {count}: {part.get_content_type()}")
         filename = part.get_filename()
-        print(f"Filename_ori:{filename}")
+        self.logger.debug(f"Original filename: {filename}")
         if filename:
             filename = "".join(
                 (
@@ -115,11 +114,11 @@ class MailClient:
                 )
                 for part, encoding in decode_header(filename)
             )
-            print("Filename_decoded:", filename)
+            self.logger.info(f"Decoded filename: {filename}")
 
             # 下载附件
             payload = part.get_payload(decode=True)
-            with open(Path("attachment") / filename, "wb") as f:
+            with open(Path(self.attachment_dir) / filename, "wb") as f:
                 f.write(payload)
 
         # 如果payload是HTML类型,尝试从中提取网址,微信就是
@@ -129,27 +128,27 @@ class MailClient:
             tree = html.fromstring(
                 part.get_payload(decode=True), parser=html.HTMLParser(encoding="utf-8")
             )
-            # print(html.tostring(tree, pretty_print=True).decode('utf-8'))  # 打印HTML树
-            print(f"tree:{tree}")
+            # self.logger.debug(html.tostring(tree, pretty_print=True).decode('utf-8'))  # 打印HTML树
+            self.logger.debug(f"Parsed HTML tree: {tree}")
             # link_elements = tree.xpath('/html/body/tr[4]/td/div/a')   # 我下载了其html,按照层级写的,不知道为什么是空值
             link_elements = tree.xpath('//a[contains(@href, "http")]')
 
-            print(f"link_elements:{link_elements}")
+            self.logger.debug(f"Found link elements: {link_elements}")
             for link in link_elements:
                 url = link.get("href")
                 if url and re.match(
                     "http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\\(\\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+",
                     url,
                 ):
-                    print(f"url:{url}")  # 打印找到的网址
+                    self.logger.info(f"Found download URL: {url}")
 
                     # 下载网址指向的文件
                     response = requests.get(url)
-                    print(f"status_code:{response.status_code}")
-                    print(f"response.headers:{response.headers}")
-
+                    self.logger.info(f"Response status code: {response.status_code}")
+                    self.logger.debug(f"Response headers: {response.headers}")
                     # 检查状态码
                     if response.status_code != 200:
+                        self.logger.error(f"Request failed with status {response.status_code}")
                         raise Exception(
                             f"Request failed with status {response.status_code}"
                         )
@@ -157,6 +156,7 @@ class MailClient:
                     # 检查错误消息
                     error_message = "请在微信中重新申请导出"  # 当前文件已过期，请在微信中重新申请导出 or 当前文件下载次数已超出限制，如有需要请在微信中重新申请导出
                     if error_message in response.text:
+                        self.logger.error(f"Download link expired or limit exceeded")
                         raise Exception(
                             f"Request failed: 不要慌, {error_message}, 并且要重新发送密码邮件"
                         )
@@ -165,14 +165,14 @@ class MailClient:
                         filename = re.findall(
                             "filename=([^;]*)", response.headers["Content-Disposition"]
                         )[0]
-                        print(f"filename_html_ori:{filename}")
+                        self.logger.debug(f"Original HTML filename: {filename}")
                         filename = unquote(filename)  # 解码文件名
-                        print(f"filename_html_decoded:{filename}")
+                        self.logger.info(f"Decoded HTML filename: {filename}")
                     else:
                         filename = url.split("/")[-1][:10]  # 实际上用不到,暂时保留
 
                     with open(
-                        Path("attachment") / re.sub(r'[\\/*?:"<>|]', "", filename),
+                        Path(self.attachment_dir) / re.sub(r'[\\/*?:"<>|]', "", filename),
                         "wb",
                     ) as f:
                         f.write(response.content)
@@ -180,50 +180,15 @@ class MailClient:
         if part.is_multipart():
             for subpart in part.get_payload():
                 count += 1
-                MailClient.walk_message(subpart, count)
+                self.walk_message(subpart, count)
 
     def fetch_mail_attachment(self):
         flag = False
-        # 创建一个字典,由于表示支付平台来源
-        payment_platform_dict = {
-            "alipay": "service@mail.alipay.com",
-            "wechatpay": "wechatpay@tencent.com",
-        }
-
-        if self.from_addr == payment_platform_dict[self.payment_platform]:
-            print("Subject, From fetch_mail_attachment:", self.subject)
+        
+        if self.from_addr == self.adapter.get_email_sender():
+            self.logger.info(f"Found bill email from {self.adapter.platform_name}: {self.subject}")
             self.walk_message(self.email_message)
             flag = True
             return flag
 
 
-# 使用
-def main():
-    username, password, imap_url, _, _ = config_env.config_loader()
-
-    # client = MailClient(username, password, imap_url, payment_platform="alipay") # payment_platform="wechatpay"
-    client = MailClient(
-        username, password, imap_url, payment_platform="wechatpay"
-    )  # payment_platform="wechatpay", "alipay"
-
-    client.connect()
-    client.fetch_mail()
-    for num in reversed(client.email_list):
-        client.get_mail_info(num)
-        if client.get_passwd():
-            print("Get password successfully")
-            break
-    if not client.paswd:
-        print("Can't get password, maybe you forget to send the password email.")
-        print("Only when you send a password, you will download the attachment.")
-    else:
-        print("-" * 20)
-        for num in reversed(client.email_list):
-            client.get_mail_info(num)
-            if client.fetch_mail_attachment():
-                print("Download attachment successfully")
-                break
-
-
-if __name__ == "__main__":
-    main()

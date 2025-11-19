@@ -2,14 +2,18 @@
 # 这里可以在 alipay_raw.csv 中直接删除某一些日期。当然你也可以用程序进行筛选
 
 import re
+from pathlib import Path
+from src.adapters.base import PaymentAdapter
+from src.utils.logger import get_logger
 
 
 class CsvTransformer:
-    def __init__(self, payment_platform):
-        self.path_raw = f"{payment_platform}_raw.csv"
-        self.path_std = f"{payment_platform}_standard.csv"
-        encoding_dict = {"alipay": "gbk", "wechatpay": "utf-8"}
-        self.encoding = encoding_dict[payment_platform]
+    def __init__(self, adapter: PaymentAdapter, path_raw: str | Path, path_std: str | Path):
+        self.adapter = adapter
+        self.path_raw = Path(path_raw)
+        self.path_std = Path(path_std)
+        self.encoding = adapter.get_csv_encoding()
+        self.logger = get_logger()
 
     def transform_to_standard_csv(self):
         """读取原始文件，截取并得到新的文件"""
@@ -27,19 +31,8 @@ class CsvTransformer:
                             for line in lines[lines.index(line) :]
                         )
 
-        print(
-            f"The original csv file has been changed to a standard csv file: {self.path_std}"
+        self.logger.info(
+            f"Transformed CSV to standard format: {self.path_std}"
         )
 
 
-def main():
-    # 全部统一,alipay,wechatpay
-    csvp_alipay = CsvTransformer("alipay")
-    csvp_alipay.transform_to_standard_csv()
-
-    # csv_wechat = CsvTransformer("wechatpay")
-    # csv_wechat.transform_to_standard_csv()
-
-
-if __name__ == "__main__":
-    main()
