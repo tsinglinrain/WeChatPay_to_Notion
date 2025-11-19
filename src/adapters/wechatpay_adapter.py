@@ -49,10 +49,24 @@ class WechatpayAdapter(PaymentAdapter):
         Returns:
             Float value with ¥ removed
         """
-        # Remove ¥ symbol if present
-        if isinstance(amount_str, str) and amount_str.startswith('¥'):
-            return float(amount_str[1:])
-        return float(amount_str)
+        # Remove ¥ symbol if present, handle empty and non-string cases
+        if isinstance(amount_str, str):
+            if amount_str.startswith('¥'):
+                try:
+                    return float(amount_str[1:])
+                except (ValueError, IndexError):
+                    return 0.0
+            elif amount_str:  # non-empty string
+                try:
+                    return float(amount_str)
+                except ValueError:
+                    return 0.0
+            else:
+                return 0.0
+        try:
+            return float(amount_str)
+        except (TypeError, ValueError):
+            return 0.0
 
     def process_remarks(self, remarks_str: str) -> str:
         """WeChat Pay uses '/' for empty remarks, convert to empty string.
