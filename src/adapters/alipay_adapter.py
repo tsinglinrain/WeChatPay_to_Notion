@@ -31,6 +31,7 @@ class AlipayAdapter(PaymentAdapter):
         return {
             'content': '商品说明',
             'amount': '金额',
+            'transaction_type': '收/支',
             'category': '交易分类',
             'datetime': '交易时间',
             'counterparty': '交易对方',

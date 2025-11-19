@@ -37,6 +37,7 @@ class PaymentAdapter(ABC):
         Returns:
             Dict mapping: {
                 'content': '商品说明',  # product description column
+                'transaction_type': '收/支',  # income or expense column
                 'amount': '金额',       # amount column
                 'category': '交易分类',  # category column
                 'datetime': '交易时间',  # datetime column

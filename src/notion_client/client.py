@@ -35,6 +35,7 @@ class NotionClient:
         self,
         content,
         price,
+        transaction_type,
         category,
         date,
         counterparty,
@@ -48,6 +49,7 @@ class NotionClient:
         Args:
             content (str): 商品名称
             price (float): 价格
+            transaction_type (str): 交易类型
             category (str): 交易分类
             date (str): 交易时间
             Counterparty (str): 交易对方
@@ -63,6 +65,7 @@ class NotionClient:
         properties = {
             "Name": {"title": [{"text": {"content": content}}]},
             "Price": {"number": price},
+            "Transaction Type": {"select": {"name": transaction_type}},
             "Category": {"select": {"name": category}},
             "Date": {
                 "date": {
@@ -90,6 +93,7 @@ class NotionClient:
         properties = self.notion_property(
             row[col_map['content']],
             row[col_map['amount']],
+            row[col_map['transaction_type']],
             row[col_map['category']],
             row[col_map['datetime']],
             row[col_map['counterparty']],

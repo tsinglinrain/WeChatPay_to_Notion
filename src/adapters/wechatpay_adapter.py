@@ -31,6 +31,7 @@ class WechatpayAdapter(PaymentAdapter):
         return {
             'content': '商品',
             'amount': '金额(元)',
+            'transaction_type': '收/支',
             'category': '交易类型',
             'datetime': '交易时间',
             'counterparty': '交易对方',
