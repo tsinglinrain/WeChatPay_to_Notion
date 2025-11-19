@@ -46,10 +46,7 @@ class FileMover:
 
     def excel_to_csv(self):
         """处理需要从Excel转换为CSV的账单（如微信支付）"""
-        if not self.adapter.needs_excel_conversion():
-            self.logger.warning("This platform does not require Excel conversion")
-            return
-        
+
         source_file = self.find_latest_file()
         if source_file:
             df = pd.read_excel(source_file)
