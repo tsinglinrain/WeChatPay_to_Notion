@@ -20,18 +20,20 @@ class DataProcessor:
         self.df = pd.read_csv(self.path, encoding="utf-8")
 
     def process_mandatory_fields(self):
-        self.df["交易时间"] = self.df["交易时间"].map(
-            lambda x: "".join([x[:10], "T", x[11:], "Z"])
-        )  # ISO 8601
-        
         # Use adapter to get column mapping
         col_map = self.adapter.get_csv_column_mapping()
+        datetime_col = col_map['datetime']
         amount_col = col_map['amount']
         remarks_col = col_map['remarks']
-        
+
+        # Process datetime using adapter mapping
+        self.df[datetime_col] = self.df[datetime_col].map(
+            lambda x: "".join([x[:10], "T", x[11:], "Z"])
+        )  # ISO 8601
+
         # Process amount using adapter
         self.df[amount_col] = self.df[amount_col].map(self.adapter.process_amount)
-        
+
         # Fill NaN values
         self.df = self.df.fillna("")
         
