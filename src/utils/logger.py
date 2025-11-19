@@ -24,11 +24,12 @@ def setup_logger(
         Configured logger instance
     """
     logger = logging.getLogger(name)
-    
-    # Avoid adding handlers multiple times
+    logger.propagate = False  # Prevent duplicate logs from ancestor loggers
+    # Clear existing handlers to allow reconfiguration
     if logger.handlers:
+        logger.handlers.clear()
         return logger
-    
+
     logger.setLevel(level)
     
     # Create formatter
