@@ -16,17 +16,17 @@
 </p>
 
 <div align="center">
-  <img src="./image/preview.gif" alt="Bill2Notion_zh_cn" style="width:100%; height:auto;" />
+  <img src="./image/banner/preview.gif" alt="Bill2Notion_zh_cn" style="width:100%; height:auto;" />
 </div>
 
 <div align="center">
-  <img src="./image/Bill2Notion_zh_cn.excalidraw.svg" alt="Bill2Notion_zh_cn" style="width:100%; height:auto;" />
+  <img src="./image/banner/Bill2Notion_Workflow_zh_cn.svg" alt="Bill2Notion_Workflow_zh_cn" style="width:100%; height:auto;" />
 </div>
 
 <details>
   <summary>导入效果静态图</summary>
     <div align="center">
-      <img src="./image/visualization_static.png" alt="visualization_static" style="width:100%; height:auto;" />
+      <img src="./image/banner/visualization_static.png" alt="visualization_static" style="width:100%; height:auto;" />
 </div>
 </details>
 
@@ -59,8 +59,8 @@
 
 - 导出账单，发送至邮箱
 <div align="center">
-  <img src="./image/wechatpay_bill.png" alt="wechatpay_bill" style="width:100%; height:auto;"/>
-  <img src="./image/alipay_bill.png" alt ="aliapy_bill" style="width:100%; height:auto;"/>
+  <img src="./image/bill_get/wechatpay_bill.png" alt="wechatpay_bill" style="width:100%; height:auto;"/>
+  <img src="./image/bill_get/alipay_bill.png" alt ="aliapy_bill" style="width:100%; height:auto;"/>
 </div>
 
 - 拷贝示例数据库，建议`duplicate`此[账单导入Notion模板](https://tsinglin.notion.site/Notion-Dashboard-2aa99f72bada807082e7ee900eae92d6)，熟悉之后可自行修改
@@ -151,7 +151,7 @@
   ```
   <details>
   <summary>格式具体示例</summary>
-  <img src="./image/alipay_password.jpg" alt="Notion_Integration_step8" style="width:40%; height:auto;"/>
+  <img src="./image/alipay_password.jpg" alt="alipay_password" style="width:40%; height:auto;"/>
 
   即自己发给自己且标题必须形为`alipay解压密码123456`或者`wechatpay解压密码123456`，原因是代码规定如此，改了必报错。
   ```python
